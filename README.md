@@ -37,11 +37,10 @@
 
 <br>
 
-![GPU](https://img.shields.io/badge/NVIDIA-16GB_VRAM-76B900?style=for-the-badge&logo=nvidia&logoColor=white)
-![Models](https://img.shields.io/badge/RTX_3060_Ti-RTX_5080-blue?style=for-the-badge)
-![Platform](https://img.shields.io/badge/Windows_Linux-native-0078D4?style=for-the-badge&logo=windows&logoColor=white)
-![llama.cpp](https://img.shields.io/badge/llama.cpp-b8196+-FF6B35?style=for-the-badge)
-![License](https://img.shields.io/badge/License-MIT-22C55E?style=for-the-badge)
+<a href="https://huggingface.co/unsloth/Qwen3.5-35B-A3B-GGUF"><img src="https://img.shields.io/badge/🤗_Model-Qwen3.5--35B--A3B-yellow?style=for-the-badge" alt="HuggingFace Model"></a>
+<a href="https://github.com/ggml-org/llama.cpp/releases"><img src="https://img.shields.io/badge/llama.cpp-b8196+-FF6B35?style=for-the-badge" alt="llama.cpp"></a>
+<a href="https://developer.nvidia.com/cuda-downloads"><img src="https://img.shields.io/badge/NVIDIA-16GB_VRAM-76B900?style=for-the-badge&logo=nvidia&logoColor=white" alt="NVIDIA"></a>
+<a href="#-license"><img src="https://img.shields.io/badge/License-MIT-22C55E?style=for-the-badge" alt="License"></a>
 
 <br>
 
@@ -51,34 +50,33 @@
 
 ---
 
-## 🗺️ Contents
+## 🗺️ Quick Navigation
 
-- [What's In Here](#-whats-in-here)
-- [Key Results](#-key-results)
-- [Quick Start](#-quick-start)
-- [⚠️ The Discovery: 155,904 Token Cliff](#️-the-discovery-155904-token-cliff)
-- [All Three Server Configs](#-all-three-server-configs)
-- [Why the 35B MoE Is Faster Than It Looks](#-why-the-35b-moe-is-faster-than-it-looks)
-- [Quantization Notes](#-quantization-notes)
-- [Hardware Notes](#-hardware-notes)
-- [🚀 RTX 5080/5090 Native Build (Advanced)](#-rtx-50805090-native-build-advanced)
-- [Benchmarking](#-benchmarking)
-- [Repo Structure](#-repo-structure)
-- [Contributing](#-contributing--reproducing)
+| I want to...                        | Go to                                                      |
+| ----------------------------------- | ---------------------------------------------------------- |
+| 🏃 **Get running fast**             | [Quick Start](#-quick-start)                               |
+| 📊 **See benchmark numbers**        | [Key Results](#-key-results)                               |
+| 🔍 **Understand the context cliff** | [The Discovery](#️-the-discovery-155904-token-cliff)        |
+| ⚙️ **Copy server configs**          | [Server Configs](#-all-three-server-configs)               |
+| 🧬 **Learn why MoE is fast**        | [MoE Explained](#-why-the-35b-moe-is-faster-than-it-looks) |
+| 🗜️ **Pick the right quant**         | [Quantization Notes](#-quantization-notes)                 |
+| 🖥️ **Check GPU compatibility**      | [Hardware Notes](#-hardware-notes)                         |
+| 🔨 **Build for RTX 5080/5090**      | [Native Build Guide](docs/RTX5080-NATIVE-BUILD.md)         |
+| 📈 **Run benchmarks**               | [Benchmarking](#-benchmarking)                             |
 
 ---
 
 ## 📦 What's In Here
 
-A production-tested llama.cpp setup for **Qwen3.5-35B-A3B** (MoE) on **any NVIDIA 16GB GPU** — everything you need to hit max speed locally:
+A production-tested [llama.cpp](https://github.com/ggml-org/llama.cpp) setup for **[Qwen3.5-35B-A3B](https://huggingface.co/unsloth/Qwen3.5-35B-A3B-GGUF)** (MoE) on **any NVIDIA 16GB GPU** — everything you need to hit max speed locally:
 
-- ✅ **Verified numbers** — every benchmark run fresh, no aspirational figures
-- 🔍 **Context cliff discovery** — the exact token count where 16GB GPUs hit a wall, and why
+- ✅ **Verified numbers** — every benchmark run fresh, no aspirational figures → [See results](results/BENCHMARK_RESULTS.md)
+- 🔍 **Context cliff discovery** — the exact token count where 16GB GPUs hit a wall → [Full write-up](DISCOVERY.md)
 - 👁️ **Working vision** — multimodal (image input) confirmed working
-- 🎛️ **Three ready-to-run profiles** — coding · fast vision · quality
+- 🎛️ **Three ready-to-run profiles** — coding · fast vision · quality → [Configs](#-all-three-server-configs)
 - 📁 **Drop-in scripts** — Windows `.bat` launchers, Python benchmarks, health checks
 
-> **Works on:** RTX 3060 Ti 16GB · RTX 4060 Ti 16GB · RTX 4070 Ti Super · RTX 4080 · RTX 5080 · Any NVIDIA 16GB+
+> **Works on:** [RTX 3060 Ti 16GB](https://www.nvidia.com/en-us/geforce/graphics-cards/30-series/rtx-3060-3060ti/) · [RTX 4060 Ti 16GB](https://www.nvidia.com/en-us/geforce/graphics-cards/40-series/rtx-4060-4060ti/) · [RTX 4070 Ti Super](https://www.nvidia.com/en-us/geforce/graphics-cards/40-series/rtx-4070-4070ti-super/) · [RTX 4080](https://www.nvidia.com/en-us/geforce/graphics-cards/40-series/rtx-4080/) · [RTX 5080](https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/rtx-5080/) · Any NVIDIA 16GB+
 
 ---
 
@@ -86,24 +84,24 @@ A production-tested llama.cpp setup for **Qwen3.5-35B-A3B** (MoE) on **any NVIDI
 
 ### 🥇 35B-A3B Q3_K_S — Coding Server (Best Config)
 
-| Metric              | Value                              |
-| ------------------- | ---------------------------------- |
-| ⚡ Generation speed | **124.7 t/s avg · 166.4 t/s peak** |
-| 📥 Prompt ingestion | **538 t/s**                        |
-| 🧠 Context window   | **155,904 tokens (≈152K)**         |
-| 👁️ Vision           | **Yes** — mmproj loaded            |
-| 💾 VRAM used        | **15.4 GB** (245 MB free)          |
-| 🎮 GPU layers       | **41 / 41** — fully on GPU         |
-| 🗜️ KV cache         | iq4_nl — only **856 MB** at 152K   |
-| 📦 Model size       | 14.2 GB (Q3_K_S, 3.94 bpw)         |
+| Metric              | Value                                                                             |
+| ------------------- | --------------------------------------------------------------------------------- |
+| ⚡ Generation speed | **124.7 t/s avg · 166.4 t/s peak**                                                |
+| 📥 Prompt ingestion | **538 t/s**                                                                       |
+| 🧠 Context window   | **155,904 tokens (≈152K)**                                                        |
+| 👁️ Vision           | **Yes** — [mmproj](https://huggingface.co/unsloth/Qwen3.5-35B-A3B-GGUF) loaded    |
+| 💾 VRAM used        | **15.4 GB** (245 MB free)                                                         |
+| 🎮 GPU layers       | **41 / 41** — fully on GPU                                                        |
+| 🗜️ KV cache         | [iq4_nl](docs/KV_CACHE_ANALYSIS.md) — only **856 MB** at 152K                     |
+| 📦 Model size       | 14.2 GB ([Q3_K_S](https://huggingface.co/unsloth/Qwen3.5-35B-A3B-GGUF), 3.94 bpw) |
 
 ### 🔀 All Three Profiles Compared
 
-| Profile            | Model          | Port |  ⚡ Speed   | 🧠 Context | 💾 VRAM |
-| ------------------ | -------------- | :--: | :---------: | :--------: | :-----: |
-| 🖥️ **Coding**      | 35B-A3B Q3_K_S | 8002 | **124 t/s** |  **152K**  | 15.4 GB |
-| 👁️ **Vision/Chat** | 9B Q4_K_XL     | 8003 | **97 t/s**  |  **256K**  | 10.6 GB |
-| 🎯 **Quality**     | 27B Q3_K_S     | 8004 | **36 t/s**  |    64K     | 12.9 GB |
+| Profile            | Model                                                                     | Port |  ⚡ Speed   | 🧠 Context | 💾 VRAM | Config                                   |
+| ------------------ | ------------------------------------------------------------------------- | :--: | :---------: | :--------: | :-----: | ---------------------------------------- |
+| 🖥️ **Coding**      | [35B-A3B Q3_K_S](https://huggingface.co/unsloth/Qwen3.5-35B-A3B-GGUF)     | 8002 | **124 t/s** |  **152K**  | 15.4 GB | [→](#️-coding--35b-a3b-q3_k_s-port-8002)  |
+| 👁️ **Vision/Chat** | [9B Q4_K_XL](https://huggingface.co/unsloth/Qwen2.5-VL-9B-Instruct-GGUF)  | 8003 | **97 t/s**  |  **256K**  | 10.6 GB | [→](#️-fast-vision--9b-q4_k_xl-port-8003) |
+| 🎯 **Quality**     | [27B Q3_K_S](https://huggingface.co/unsloth/Qwen2.5-VL-27B-Instruct-GGUF) | 8004 | **36 t/s**  |    64K     | 12.9 GB | [→](#️-quality--27b-q3_k_s-port-8004)     |
 
 > **⚠️ One server at a time.** The 35B alone uses 15.4 GB — no two models fit in 16 GB simultaneously.
 
@@ -117,37 +115,54 @@ A production-tested llama.cpp setup for **Qwen3.5-35B-A3B** (MoE) on **any NVIDI
 
 Download the latest CUDA release from [llama.cpp releases](https://github.com/ggml-org/llama.cpp/releases):
 
-```
-llama-bXXXX-bin-win-cuda-12.4-x64.zip   ← Windows
-```
+| Platform | Download                                |
+| -------- | --------------------------------------- |
+| Windows  | `llama-bXXXX-bin-win-cuda-12.4-x64.zip` |
+| Linux    | `llama-bXXXX-bin-linux-x64-cuda.tar.gz` |
 
 Extract to `./llama-bin/` in this repo root.
 
+> 💡 **Tip:** Need CUDA? Download from [NVIDIA CUDA Toolkit](https://developer.nvidia.com/cuda-downloads) (12.4+ recommended)
+
 **2. Download the models**
 
+Install the [HuggingFace CLI](https://huggingface.co/docs/huggingface_hub/guides/cli):
+
 ```bash
-# 35B Coding server (14.2 GB)
+pip install -U "huggingface_hub[cli]"
+```
+
+Then download:
+
+```bash
+# 35B Coding server (14.2 GB) — REQUIRED
 huggingface-cli download unsloth/Qwen3.5-35B-A3B-GGUF \
   Qwen3.5-35B-A3B-Q3_K_S.gguf \
   mmproj-Qwen3.5-35B-A3B-F16.gguf \
   --local-dir ./models/unsloth-gguf/
 
-# 9B Vision server (~5 GB)
+# 9B Vision server (~5 GB) — OPTIONAL
 huggingface-cli download unsloth/Qwen2.5-VL-9B-Instruct-GGUF \
   Qwen2.5-VL-9B-Instruct-Q4_K_XL.gguf \
   mmproj-Qwen2.5-VL-9B-Instruct-F16.gguf \
   --local-dir ./models/unsloth-gguf/
 
-# 27B Quality server (~11 GB) — optional
+# 27B Quality server (~11 GB) — OPTIONAL
 huggingface-cli download unsloth/Qwen2.5-VL-27B-Instruct-GGUF \
   Qwen2.5-VL-27B-Instruct-Q3_K_S.gguf \
   mmproj-Qwen2.5-VL-27B-Instruct-F16.gguf \
   --local-dir ./models/unsloth-gguf/
 ```
 
-Or use the included helper: `.\download_model.ps1`
+Or use the included helper: [`download_model.ps1`](download_model.ps1)
 
-**3. Python** (benchmark scripts only) — 3.11+ with `pip install requests`
+> 🤗 **Direct downloads:** [35B-A3B](https://huggingface.co/unsloth/Qwen3.5-35B-A3B-GGUF) · [9B-VL](https://huggingface.co/unsloth/Qwen2.5-VL-9B-Instruct-GGUF) · [27B-VL](https://huggingface.co/unsloth/Qwen2.5-VL-27B-Instruct-GGUF)
+
+**3. Python** (benchmark scripts only) — 3.11+ with:
+
+```bash
+pip install requests
+```
 
 ---
 
@@ -188,6 +203,8 @@ start_servers_speed.bat quality
 </tr>
 </table>
 
+> 📝 **Config file:** All settings are in [`config/servers.yaml`](config/servers.yaml) — edit paths there for your setup.
+
 ### Verify It's Running
 
 ```bash
@@ -204,7 +221,7 @@ curl -X POST http://127.0.0.1:8002/v1/chat/completions \
   }'
 ```
 
-> **💡 First 2 requests may be slow (~12 t/s on Blackwell/SM120 GPUs).** This is CUDA PTX→sm_120 JIT compilation (one-time warmup). **RTX 30xx/40xx users won't see this** — native SM89 support in CUDA 12.x. Full speed kicks in from request 2-3 onward. Don't benchmark until warm.
+> **💡 First 2 requests may be slow (~12 t/s on Blackwell/SM120 GPUs).** This is CUDA PTX→sm_120 JIT compilation (one-time warmup). **RTX 30xx/40xx users won't see this** — native SM89 support in CUDA 12.x. Full speed kicks in from request 2-3 onward. [Learn more →](docs/RTX5080-NATIVE-BUILD.md#jit-warmup-explained)
 
 ---
 
@@ -243,7 +260,7 @@ curl -X POST http://127.0.0.1:8002/v1/chat/completions \
 
 ### Why It Happens
 
-Qwen3.5-35B-A3B uses a **hybrid recurrent architecture** — 30 Gated DeltaNet layers (linear recurrent) interleaved with 10 standard Gated Attention layers. llama.cpp allocates a `CUDA_Host compute buffer`: pinned host RAM for PCIe data transfers on every inference pass.
+[Qwen3.5-35B-A3B](https://huggingface.co/unsloth/Qwen3.5-35B-A3B-GGUF) uses a **hybrid recurrent architecture** — 30 Gated DeltaNet layers (linear recurrent) interleaved with 10 standard Gated Attention layers. llama.cpp allocates a `CUDA_Host compute buffer`: pinned host RAM for PCIe data transfers on every inference pass.
 
 This buffer grows with context size. Between 155,904 and 156,160 tokens, it crosses an **internal alignment boundary** — jumping from 312.52 MB to 313.02 MB (a 0.5 MB step). Past this threshold, per-token PCIe transfer volume exceeds available bandwidth, and the model slows 10×.
 
@@ -272,12 +289,12 @@ This buffer grows with context size. Between 155,904 and 156,160 tokens, it cros
 --chat-template-kwargs '{"enable_thinking":false}'
 ```
 
-| Decision               | Reasoning                                                                                                                                 |
-| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| **Q3_K_S over Q4_K_M** | Q4_K_M = 20.5 GB → partial CPU offload → 3–4 t/s. Q3_K_S = 14.2 GB → all 41 layers on GPU → 124 t/s. Full GPU wins by 30×.                |
-| **iq4_nl KV cache**    | MoE uses only 10/40 layers for attention. KV at 152K = only 856 MB. iq4_nl dequants faster for small KV caches.                           |
-| **thinking disabled**  | `enable_thinking:false` prevents 2–3× slowdown from chain-of-thought overhead. Use `true` only when you explicitly need reasoning traces. |
-| **-c 155904**          | Exactly one step below the 313 MB PCIe alignment cliff. This is the verified sweet spot.                                                  |
+| Decision                                             | Reasoning                                                                                                                                 |
+| ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| **[Q3_K_S](docs/Quantization_Notes.md) over Q4_K_M** | Q4_K_M = 20.5 GB → partial CPU offload → 3–4 t/s. Q3_K_S = 14.2 GB → all 41 layers on GPU → 124 t/s. Full GPU wins by 30×.                |
+| **[iq4_nl KV cache](docs/KV_CACHE_ANALYSIS.md)**     | MoE uses only 10/40 layers for attention. KV at 152K = only 856 MB. iq4_nl dequants faster for small KV caches.                           |
+| **thinking disabled**                                | `enable_thinking:false` prevents 2–3× slowdown from chain-of-thought overhead. Use `true` only when you explicitly need reasoning traces. |
+| **-c 155904**                                        | Exactly one step below the 313 MB PCIe alignment cliff. This is the verified sweet spot.                                                  |
 
 ---
 
@@ -291,7 +308,7 @@ This buffer grows with context size. Between 155,904 and 156,160 tokens, it cros
 --chat-template-kwargs '{"enable_thinking":false}'
 ```
 
-Full 256K context (model native max). Uses **q8_0 KV** — not iq4_nl — because the 9B is a dense model with 33 attention layers. On high-bandwidth GPUs (GDDR6X/GDDR7), raw read speed matters more than dequant cost, so the larger but simpler q8_0 wins.
+Full 256K context ([model native max](https://huggingface.co/Qwen/Qwen2.5-VL-9B-Instruct)). Uses **[q8_0 KV](docs/KV_CACHE_ANALYSIS.md)** — not iq4_nl — because the 9B is a dense model with 33 attention layers. On high-bandwidth GPUs (GDDR6X/GDDR7), raw read speed matters more than dequant cost, so the larger but simpler q8_0 wins.
 
 ---
 
@@ -319,21 +336,21 @@ The "35B" label is misleading. Here's the actual compute:
   MoE   35B:  ~3B params active per token  → 124 t/s  🚀
 ```
 
-Qwen3.5-35B-A3B has **256 experts** total, but only **8 routed + 1 shared** activate per token. Effective compute ≈ 3B parameters per forward pass — comparable to a 3B dense model. This is why a nominally "35B" model at 14.2 GB outruns a dense 27B at 12.3 GB by 3.4×.
+[Qwen3.5-35B-A3B](https://huggingface.co/unsloth/Qwen3.5-35B-A3B-GGUF) has **256 experts** total, but only **8 routed + 1 shared** activate per token. Effective compute ≈ 3B parameters per forward pass — comparable to a 3B dense model. This is why a nominally "35B" model at 14.2 GB outruns a dense 27B at 12.3 GB by 3.4×.
 
 **Architecture breakdown:**
 
-| Component             | Detail                                 |
-| --------------------- | -------------------------------------- |
-| Total layers          | 40 transformer layers                  |
-| Recurrent layers      | 30 × Gated DeltaNet (linear recurrent) |
-| Attention layers      | 10 × Gated Attention (standard)        |
-| Experts per MoE block | 256 total · 8 routed + 1 shared active |
-| Embedding dim         | n_embd = 2048                          |
-| KV heads              | n_heads_kv = 4                         |
-| KV footprint          | Only 10 layers need KV cache → tiny    |
+| Component             | Detail                                                                     |
+| --------------------- | -------------------------------------------------------------------------- |
+| Total layers          | 40 transformer layers                                                      |
+| Recurrent layers      | 30 × [Gated DeltaNet](https://arxiv.org/abs/2501.06026) (linear recurrent) |
+| Attention layers      | 10 × Gated Attention (standard)                                            |
+| Experts per MoE block | 256 total · 8 routed + 1 shared active                                     |
+| Embedding dim         | n_embd = 2048                                                              |
+| KV heads              | n_heads_kv = 4                                                             |
+| KV footprint          | Only 10 layers need KV cache → tiny                                        |
 
-The tiny KV footprint (only 10 attention layers vs 40 for a dense model) is also why iq4_nl KV cache works better here than q8_0 — there's simply less KV data to transfer, so dequant speed dominates over read bandwidth.
+The tiny KV footprint (only 10 attention layers vs 40 for a dense model) is also why [iq4_nl KV cache](docs/KV_CACHE_ANALYSIS.md) works better here than q8_0 — there's simply less KV data to transfer, so dequant speed dominates over read bandwidth.
 
 ---
 
@@ -341,14 +358,14 @@ The tiny KV footprint (only 10 attention layers vs 40 for a dense model) is also
 
 ### 35B-A3B MoE: Standard Quants Win
 
-> **Don't use Unsloth Dynamic quants for the MoE model.** UD-Q4_K_XL uses MXFP4 mixed-precision layers that underperform on MoE architectures — confirmed by Unsloth's founder.
+> **Don't use Unsloth Dynamic quants for the MoE model.** UD-Q4_K_XL uses MXFP4 mixed-precision layers that underperform on MoE architectures — confirmed by [Unsloth's founder on Reddit](https://www.reddit.com/r/LocalLLaMA/comments/1rei65v/).
 
-|   Quant    |    Size     | Perplexity |     vs Q8_0     | Notes                           |
-| :--------: | :---------: | :--------: | :-------------: | ------------------------------- |
-|    Q8_0    |   36.9 GB   |   6.534    |    baseline     | Too large for 16 GB             |
-|   Q4_K_M   |   ~20 GB    |   6.669    |      +2.1%      | Too large for full GPU          |
-| **Q3_K_S** | **14.2 GB** |  **~6.9**  |     **~5%**     | ✅ **Best for 16 GB** — all GPU |
-| UD-Q4_K_XL |   ~19 GB    |   7.170    | **+9.7% worse** | ❌ Avoid on MoE                 |
+|                               Quant                               |    Size     | Perplexity |   vs Q8_0   | Download                                                     |
+| :---------------------------------------------------------------: | :---------: | :--------: | :---------: | ------------------------------------------------------------ |
+|                               Q8_0                                |   36.9 GB   |   6.534    |  baseline   | —                                                            |
+|  [Q4_K_M](https://huggingface.co/bartowski/Qwen3.5-35B-A3B-GGUF)  |   ~20 GB    |   6.669    |    +2.1%    | [🤗](https://huggingface.co/bartowski/Qwen3.5-35B-A3B-GGUF)  |
+| **[Q3_K_S](https://huggingface.co/unsloth/Qwen3.5-35B-A3B-GGUF)** | **14.2 GB** |  **~6.9**  |   **~5%**   | [🤗](https://huggingface.co/unsloth/Qwen3.5-35B-A3B-GGUF) ✅ |
+| [UD-Q4_K_XL](https://huggingface.co/unsloth/Qwen3.5-35B-A3B-GGUF) |   ~19 GB    |   7.170    | +9.7% worse | ❌ Avoid                                                     |
 
 Q3_K_S is the only quant that fits all 41 layers on a 16 GB GPU. The ~5% perplexity increase vs Q4_K_M is a much smaller penalty than the 30× speed loss from partial CPU offload (124 t/s vs 3–4 t/s).
 
@@ -358,10 +375,10 @@ For dense models, UD quants perform normally. The MXFP4 issue is specific to MoE
 
 ### KV Cache: Different Rules for MoE vs Dense
 
-| Model type      | Best KV quant | Why                                                      |
-| --------------- | :-----------: | -------------------------------------------------------- |
-| MoE (35B-A3B)   |   `iq4_nl`    | Only 10 attention layers → small KV → dequant speed wins |
-| Dense (9B, 27B) |    `q8_0`     | 33+ attention layers → large KV → read bandwidth wins    |
+| Model type      | Best KV quant | Why                                                      | Learn more                               |
+| --------------- | :-----------: | -------------------------------------------------------- | ---------------------------------------- |
+| MoE (35B-A3B)   |   `iq4_nl`    | Only 10 attention layers → small KV → dequant speed wins | [KV Analysis](docs/KV_CACHE_ANALYSIS.md) |
+| Dense (9B, 27B) |    `q8_0`     | 33+ attention layers → large KV → read bandwidth wins    | [KV Analysis](docs/KV_CACHE_ANALYSIS.md) |
 
 > **⚠️ Never mix K and V quant types.** Using different quants for `-ctk` and `-ctv` causes a significant slowdown. Always set both to the same value.
 
@@ -373,36 +390,36 @@ For dense models, UD quants perform normally. The MXFP4 issue is specific to MoE
 
 The 35B-A3B Q3_K_S model (14.2 GB) fits on any NVIDIA card with **16 GB+ VRAM**. Speeds vary by generation:
 
-| GPU                   | VRAM  |  Est. Speed  | Notes                                 |
-| --------------------- | :---: | :----------: | ------------------------------------- |
-| **RTX 5080**          | 16 GB | **124 t/s**  | ✅ Tested — SM120, GDDR7              |
-| RTX 5070 Ti           | 16 GB | ~100-110 t/s | Same arch, slightly less bandwidth    |
-| **RTX 4080**          | 16 GB |  ~85-95 t/s  | SM89, GDDR6X — should hit same cliff  |
-| **RTX 4070 Ti Super** | 16 GB |  ~75-85 t/s  | Cut-down 4080, still fast             |
-| **RTX 4060 Ti**       | 16 GB |  ~55-70 t/s  | Narrower bus, but works               |
-| **RTX 3060 Ti**       | 16 GB |  ~45-60 t/s  | Older arch, still capable             |
-| RTX 3090 / 4090       | 24 GB |    Higher    | Can run Q4_K_M full-GPU, more context |
+| GPU                                                                                                                                                                          | VRAM  |  Est. Speed  | Notes                                 |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---: | :----------: | ------------------------------------- |
+| **[RTX 5080](https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/rtx-5080/)**                                                                                      | 16 GB | **124 t/s**  | ✅ Tested — SM120, GDDR7              |
+| [RTX 5070 Ti](https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/)                                                                                                | 16 GB | ~100-110 t/s | Same arch, slightly less bandwidth    |
+| **[RTX 4080](https://www.nvidia.com/en-us/geforce/graphics-cards/40-series/rtx-4080/)**                                                                                      | 16 GB |  ~85-95 t/s  | SM89, GDDR6X — should hit same cliff  |
+| **[RTX 4070 Ti Super](https://www.nvidia.com/en-us/geforce/graphics-cards/40-series/rtx-4070-4070ti-super/)**                                                                | 16 GB |  ~75-85 t/s  | Cut-down 4080, still fast             |
+| **[RTX 4060 Ti](https://www.nvidia.com/en-us/geforce/graphics-cards/40-series/rtx-4060-4060ti/)**                                                                            | 16 GB |  ~55-70 t/s  | Narrower bus, but works               |
+| **[RTX 3060 Ti](https://www.nvidia.com/en-us/geforce/graphics-cards/30-series/rtx-3060-3060ti/)**                                                                            | 16 GB |  ~45-60 t/s  | Older arch, still capable             |
+| [RTX 3090](https://www.nvidia.com/en-us/geforce/graphics-cards/30-series/rtx-3090-3090ti/) / [4090](https://www.nvidia.com/en-us/geforce/graphics-cards/40-series/rtx-4090/) | 24 GB |    Higher    | Can run Q4_K_M full-GPU, more context |
 
-> **The 155,904 context cliff is architecture-dependent, not GPU-specific.** All cards above should hit the same cliff at the same token count — it's about the `CUDA_Host buffer` alignment in llama.cpp, not VRAM or GPU model. If you test on a different card, please report your cliff point!
+> **The 155,904 context cliff is architecture-dependent, not GPU-specific.** All cards above should hit the same cliff at the same token count — it's about the `CUDA_Host buffer` alignment in llama.cpp, not VRAM or GPU model. If you test on a different card, please [report your cliff point](#-contributing--reproducing)!
 
 ### Tested Hardware
 
-| Component | Tested              | Notes                          |
-| --------- | ------------------- | ------------------------------ |
-| GPU       | RTX 5080 16GB GDDR7 | SM120 Blackwell                |
-| CPU       | Ryzen 7 9800X3D     | 8-core, not Ryzen 9            |
-| RAM       | 96 GB DDR5          | Overkill — 32 GB sufficient    |
-| PCIe      | 5.0 x16             | 4.0 x16 should be fine         |
-| OS        | Windows 11 Pro      | Linux untested but should work |
+| Component | Tested                                                                                                        | Notes                          |
+| --------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------ |
+| GPU       | [RTX 5080 16GB GDDR7](https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/rtx-5080/)                | SM120 Blackwell                |
+| CPU       | [Ryzen 7 9800X3D](https://www.amd.com/en/products/processors/desktops/ryzen/9000-series/ryzen-7-9800x3d.html) | 8-core, not Ryzen 9            |
+| RAM       | 96 GB DDR5                                                                                                    | Overkill — 32 GB sufficient    |
+| PCIe      | 5.0 x16                                                                                                       | 4.0 x16 should be fine         |
+| OS        | Windows 11 Pro                                                                                                | Linux untested but should work |
 
 ### GPU Architecture Notes
 
-| Topic                   | Detail                                                                                                                          |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| **SM120 (Blackwell)**   | Pre-built llama.cpp uses CUDA 12.4 which lacks sm_120. PTX→sm_120 JIT on first run = 2 slow requests, then full speed.          |
-| **SM89 (Ada Lovelace)** | 40xx series has native support in CUDA 12.x — no JIT warmup needed                                                              |
-| **Source build**        | `-DCMAKE_CUDA_ARCHITECTURES=120 -DGGML_CUDA_FA_ALL_QUANTS=ON` for native Blackwell kernels. Potential +10–20% gain.             |
-| **PCIe bandwidth**      | Recurrent state transfers (MoE) are PCIe-bound. Gen 4 vs 5 shouldn't change cliff location, only affect post-cliff performance. |
+| Topic                   | Detail                                                                                                                                                   |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **SM120 (Blackwell)**   | Pre-built llama.cpp uses CUDA 12.4 which lacks sm_120. PTX→sm_120 JIT on first run = 2 slow requests. **[Build native →](docs/RTX5080-NATIVE-BUILD.md)** |
+| **SM89 (Ada Lovelace)** | 40xx series has native support in [CUDA 12.x](https://developer.nvidia.com/cuda-downloads) — no JIT warmup needed                                        |
+| **Source build**        | `-DCMAKE_CUDA_ARCHITECTURES=120 -DGGML_CUDA_FA_ALL_QUANTS=ON` for native Blackwell kernels. **[Full guide →](docs/RTX5080-NATIVE-BUILD.md)**             |
+| **PCIe bandwidth**      | Recurrent state transfers (MoE) are PCIe-bound. Gen 4 vs 5 shouldn't change cliff location.                                                              |
 
 ### Minimum Requirements
 
@@ -418,7 +435,7 @@ The 35B-A3B Q3_K_S model (14.2 GB) fits on any NVIDIA card with **16 GB+ VRAM**.
 
 ## 🚀 RTX 5080/5090 Native Build (Advanced)
 
-> **For Blackwell (SM120) GPU owners who want maximum performance.**
+> **For [Blackwell (SM120)](https://www.nvidia.com/en-us/technologies/blackwell-architecture/) GPU owners who want maximum performance.**
 
 ### The Problem with Pre-built Binaries
 
@@ -500,7 +517,7 @@ python tests/compare_models.py
 python tests/vision_test.py
 ```
 
-Full documented results: [`results/BENCHMARK_RESULTS.md`](results/BENCHMARK_RESULTS.md)
+📄 **Full documented results:** [`results/BENCHMARK_RESULTS.md`](results/BENCHMARK_RESULTS.md)
 
 ---
 
@@ -510,36 +527,36 @@ Full documented results: [`results/BENCHMARK_RESULTS.md`](results/BENCHMARK_RESU
 Qwen-3.5-16G-Vram-Local/
 │
 ├── 📄 README.md                  ← You are here
-├── 📄 DISCOVERY.md               ← Full 155,904 cliff write-up
-├── 📄 CHANGELOG.md               ← Version history
+├── 📄 [DISCOVERY.md](DISCOVERY.md)               ← Full 155,904 cliff write-up
+├── 📄 [CHANGELOG.md](CHANGELOG.md)               ← Version history
 │
 ├── ⚙️  config/
-│   ├── servers.yaml              ← All server configs — edit model paths here
-│   └── config_loader.py         ← Python config loader
+│   ├── [servers.yaml](config/servers.yaml)              ← All server configs — edit model paths here
+│   └── [config_loader.py](config/config_loader.py)     ← Python config loader
 │
 ├── 🧪 tests/
-│   ├── simple_benchmark.py      ← Main benchmark (avg/peak/p95)
-│   ├── health_check.py          ← Server liveness check
-│   ├── compare_models.py        ← Side-by-side comparison
-│   ├── benchmark.py             ← Extended benchmark suite
-│   └── vision_test.py           ← Multimodal / image test
+│   ├── [simple_benchmark.py](tests/simple_benchmark.py)      ← Main benchmark (avg/peak/p95)
+│   ├── [health_check.py](tests/health_check.py)              ← Server liveness check
+│   ├── [compare_models.py](tests/compare_models.py)          ← Side-by-side comparison
+│   ├── [benchmark.py](tests/benchmark.py)                    ← Extended benchmark suite
+│   └── [vision_test.py](tests/vision_test.py)                ← Multimodal / image test
 │
 ├── 📊 results/
-│   └── BENCHMARK_RESULTS.md     ← Full documented benchmark run
+│   └── [BENCHMARK_RESULTS.md](results/BENCHMARK_RESULTS.md)     ← Full documented benchmark run
 │
 ├── 📚 docs/
-│   ├── RTX5080-NATIVE-BUILD.md  ← 🚀 SM120 native build guide (5080/5090 only)
-│   ├── KV_CACHE_ANALYSIS.md     ← KV quant deep-dive
-│   ├── PERFORMANCE_MATRIX.md    ← Model comparison matrix
-│   ├── 27B_OPTIMIZATION_ANALYSIS.md
-│   └── RESEARCH_FINDINGS.md
+│   ├── [RTX5080-NATIVE-BUILD.md](docs/RTX5080-NATIVE-BUILD.md)  ← 🚀 SM120 native build guide (5080/5090 only)
+│   ├── [KV_CACHE_ANALYSIS.md](docs/KV_CACHE_ANALYSIS.md)     ← KV quant deep-dive
+│   ├── [PERFORMANCE_MATRIX.md](docs/PERFORMANCE_MATRIX.md)    ← Model comparison matrix
+│   ├── [27B_OPTIMIZATION_ANALYSIS.md](docs/27B_OPTIMIZATION_ANALYSIS.md)
+│   └── [RESEARCH_FINDINGS.md](docs/RESEARCH_FINDINGS.md)
 │
-├── 🚀 start_servers_speed.bat    ← Windows: launch coding/vision/quality
-├── 🔧 start_servers_standard.bat ← Windows: standard profiles
-├── 🛑 stop_servers.bat           ← Windows: kill all servers
-├── 🐍 server_manager.py          ← Python server lifecycle manager
-├── 🐍 qwen_api.py                ← Minimal API client helper
-└── 📥 download_model.ps1         ← Model download script
+├── 🚀 [start_servers_speed.bat](start_servers_speed.bat)    ← Windows: launch coding/vision/quality
+├── 🔧 [start_servers_standard.bat](start_servers_standard.bat) ← Windows: standard profiles
+├── 🛑 [stop_servers.bat](stop_servers.bat)           ← Windows: kill all servers
+├── 🐍 [server_manager.py](server_manager.py)          ← Python server lifecycle manager
+├── 🐍 [qwen_api.py](qwen_api.py)                ← Minimal API client helper
+└── 📥 [download_model.ps1](download_model.ps1)         ← Model download script
 ```
 
 ---
@@ -556,29 +573,59 @@ Qwen-3.5-16G-Vram-Local/
 | Context size at cliff               | 156,160        |
 | Speed before / after                | 85 t/s → 8 t/s |
 
+👉 **[Open an issue](https://github.com/willbnu/Qwen-3.5-16G-Vram-Local/issues/new)** with your results!
+
 This helps confirm whether the 155,904 cliff is universal or shifts with GPU/architecture.
 
 Other useful contributions:
 
 - 🐧 **Linux results** — same hardware, different OS
-- 🔨 **Native sm_89/sm_120 builds** — source compile benchmarks
+- 🔨 **Native sm_89/sm_120 builds** — source compile benchmarks → [Build guide](docs/RTX5080-NATIVE-BUILD.md)
 - 🧪 **Other MoE models** — does the cliff exist on other hybrid-recurrent architectures?
 
 ---
 
-## 🔗 Related
+## 🔗 Related Resources
 
-- 📖 [Reddit thread: Qwen3.5-35B-A3B on RTX 5080](https://www.reddit.com/r/LocalLLaMA/comments/1rei65v/) — starting point for these benchmarks
-- 🤗 [Unsloth GGUF models](https://huggingface.co/unsloth) — Q3_K_S and vision models
-- 🤗 [Bartowski GGUF models](https://huggingface.co/bartowski) — Q4_K_M (better PPL than UD-Q4_K_XL for MoE)
-- 🛠️ [llama.cpp releases](https://github.com/ggml-org/llama.cpp/releases)
-- 🤖 [Qwen on HuggingFace](https://huggingface.co/Qwen)
+### Models & Downloads
+
+| Resource                             | Link                                                                                                |
+| ------------------------------------ | --------------------------------------------------------------------------------------------------- |
+| 🤗 **Qwen3.5-35B-A3B (Recommended)** | [unsloth/Qwen3.5-35B-A3B-GGUF](https://huggingface.co/unsloth/Qwen3.5-35B-A3B-GGUF)                 |
+| 🤗 Qwen2.5-VL-9B (Vision)            | [unsloth/Qwen2.5-VL-9B-Instruct-GGUF](https://huggingface.co/unsloth/Qwen2.5-VL-9B-Instruct-GGUF)   |
+| 🤗 Qwen2.5-VL-27B (Quality)          | [unsloth/Qwen2.5-VL-27B-Instruct-GGUF](https://huggingface.co/unsloth/Qwen2.5-VL-27B-Instruct-GGUF) |
+| 🤗 Alternative quants                | [bartowski/Qwen3.5-35B-A3B-GGUF](https://huggingface.co/bartowski/Qwen3.5-35B-A3B-GGUF)             |
+
+### Tools & Frameworks
+
+| Resource              | Link                                                                        |
+| --------------------- | --------------------------------------------------------------------------- |
+| 🛠️ **llama.cpp**      | [github.com/ggml-org/llama.cpp](https://github.com/ggml-org/llama.cpp)      |
+| 🛠️ llama.cpp releases | [Releases page](https://github.com/ggml-org/llama.cpp/releases)             |
+| 🐍 HuggingFace CLI    | [CLI documentation](https://huggingface.co/docs/huggingface_hub/guides/cli) |
+| 🔧 CUDA Toolkit       | [NVIDIA downloads](https://developer.nvidia.com/cuda-downloads)             |
+
+### Community & Discussion
+
+| Resource                           | Link                                                                         |
+| ---------------------------------- | ---------------------------------------------------------------------------- |
+| 📖 **Reddit: Original benchmarks** | [r/LocalLLaMA thread](https://www.reddit.com/r/LocalLLaMA/comments/1rei65v/) |
+| 📖 r/LocalLLaMA                    | [reddit.com/r/LocalLLaMA](https://www.reddit.com/r/LocalLLaMA/)              |
+| 📖 Qwen documentation              | [QwenLM GitHub](https://github.com/QwenLM/Qwen)                              |
+
+### Architecture Papers
+
+| Resource                 | Link                                                         |
+| ------------------------ | ------------------------------------------------------------ |
+| 📄 Gated DeltaNet        | [arxiv.org/abs/2501.06026](https://arxiv.org/abs/2501.06026) |
+| 📄 Qwen Technical Report | [arxiv.org/abs/2309.16609](https://arxiv.org/abs/2309.16609) |
+| 📄 Flash Attention       | [arxiv.org/abs/2205.14135](https://arxiv.org/abs/2205.14135) |
 
 ---
 
 ## 📜 License
 
-**Scripts and configs:** MIT — use freely, no attribution required.
+**Scripts and configs:** [MIT](LICENSE) — use freely, no attribution required.
 
 **Model weights:** Subject to [Qwen's license](https://huggingface.co/Qwen/Qwen2.5-72B/blob/main/LICENSE) (Apache 2.0 for base models).
 
@@ -586,9 +633,15 @@ Other useful contributions:
 
 <div align="center">
 
-**⭐ Star if this saved you hours of benchmarking**
+### ⭐ Star if this saved you hours of benchmarking
+
+[![Star History Chart](https://api.star-history.com/svg?repos=willbnu/Qwen-3.5-16G-Vram-Local&type=Date)](https://star-history.com/#willbnu/Qwen-3.5-16G-Vram-Local&Date)
 
 **🔄 Test on your GPU · Report your cliff · Help the community**
+
+[📤 Open an Issue](https://github.com/willbnu/Qwen-3.5-16G-Vram-Local/issues/new) · [🔀 Submit a PR](https://github.com/willbnu/Qwen-3.5-16G-Vram-Local/pulls) · [💬 Discuss](https://github.com/willbnu/Qwen-3.5-16G-Vram-Local/discussions)
+
+---
 
 _Numbers are reproducible · PRs welcome · MIT license_
 
