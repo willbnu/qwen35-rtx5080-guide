@@ -31,7 +31,7 @@ servers:
     model: "Qwen3.5-35B-A3B-Q3_K_S.gguf" # Q3_K_S — all 41 layers GPU
     mmproj: "mmproj-35B-F16.gguf" # Vision included
     config:
-      context: 98304 # 96K — stable performance
+      context: 122880 # 120K — best balance of context + speed (~120 t/s)
       gpu_layers: 99 # All 41/41 layers on GPU
       flash_attn: "on" # MUST be on for iq4_nl KV
       cache_type_k: "iq4_nl" # MoE KV: 540 MB at 96K

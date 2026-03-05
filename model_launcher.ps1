@@ -16,7 +16,7 @@ switch ($Model.ToLower()) {
         $port    = 8002
         $model   = "$MODELS\Qwen3.5-35B-A3B-Q3_K_S.gguf"
         $mmproj  = "$MODELS\mmproj-35B-F16.gguf"
-        $ctx     = 98304    # 96K context - stable speed
+        $ctx     = 122880   # 120K context - best balance of context + speed
         $extra   = @("--parallel", "1", "--reasoning-budget", "0")
     }
     "9b" {

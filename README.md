@@ -242,7 +242,7 @@ start_servers_speed.bat quality
   -m ./models/unsloth-gguf/Qwen3.5-35B-A3B-Q3_K_S.gguf \
   --mmproj ./models/unsloth-gguf/mmproj-35B-F16.gguf \
   --host 127.0.0.1 --port 8002 \
-  -c 98304 -ngl 99 \
+  -c 122880 -ngl 99 \
   --flash-attn on \
   -ctk iq4_nl -ctv iq4_nl \
   --parallel 1 \
