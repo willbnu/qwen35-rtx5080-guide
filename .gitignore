@@ -57,7 +57,6 @@ nul
 *.bak
 *.swp
 *.swo
-SOCIAL_POSTS.md
 TERMINAL_BANNER*.txt
 TERMINAL_OUTPUT.md
 BENCHMARK_VISUAL.md
