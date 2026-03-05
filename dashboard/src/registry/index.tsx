@@ -19,6 +19,9 @@ import type {
   BenchmarkPanelProps,
 } from '../catalog';
 
+// Import real dashboard components
+import { MetricsPanel as MetricsPanelComponent } from '../components/dashboard/MetricsPanel';
+
 // ============================================================================
 // Types for Component Props
 // ============================================================================
@@ -97,64 +100,11 @@ const DashboardLayout: ComponentType<ComponentRenderProps<DashboardLayoutProps>>
 };
 
 /**
- * Stub component for MetricsPanel
- * Displays LLM performance metrics including TPS and token counts
- *
- * @phase 4 - Full implementation in src/components/dashboard/MetricsPanel.tsx
+ * MetricsPanel component wrapper for registry
+ * Uses the full implementation from src/components/dashboard/MetricsPanel.tsx
  */
-const MetricsPanel: ComponentType<ComponentRenderProps<MetricsPanelProps>> = ({
-  genTps,
-  promptTps,
-  totalTokens,
-  promptTokens,
-  completionTokens,
-  time,
-  averageLatency,
-  requestsCount,
-}) => {
-  return (
-    <div className="rounded-lg border bg-card p-4 shadow-sm">
-      <h3 className="mb-3 text-lg font-semibold text-card-foreground">Performance Metrics</h3>
-      <div className="grid grid-cols-2 gap-3 text-sm">
-        <div>
-          <span className="text-muted-foreground">Gen TPS:</span>{' '}
-          <span className="font-mono font-medium">{genTps?.toFixed(2) ?? '-'}</span>
-        </div>
-        <div>
-          <span className="text-muted-foreground">Prompt TPS:</span>{' '}
-          <span className="font-mono font-medium">{promptTps?.toFixed(2) ?? '-'}</span>
-        </div>
-        <div>
-          <span className="text-muted-foreground">Total Tokens:</span>{' '}
-          <span className="font-mono font-medium">{totalTokens?.toLocaleString() ?? '-'}</span>
-        </div>
-        <div>
-          <span className="text-muted-foreground">Prompt Tokens:</span>{' '}
-          <span className="font-mono font-medium">{promptTokens?.toLocaleString() ?? '-'}</span>
-        </div>
-        <div>
-          <span className="text-muted-foreground">Completion Tokens:</span>{' '}
-          <span className="font-mono font-medium">{completionTokens?.toLocaleString() ?? '-'}</span>
-        </div>
-        <div>
-          <span className="text-muted-foreground">Time:</span>{' '}
-          <span className="font-mono font-medium">{time?.toFixed(2) ?? '-'}s</span>
-        </div>
-        {averageLatency !== undefined && averageLatency !== null && (
-          <div>
-            <span className="text-muted-foreground">Latency:</span>{' '}
-            <span className="font-mono font-medium">{averageLatency}ms</span>
-          </div>
-        )}
-        {requestsCount !== undefined && requestsCount !== null && (
-          <div>
-            <span className="text-muted-foreground">Requests:</span>{' '}
-            <span className="font-mono font-medium">{requestsCount}</span>
-          </div>
-        )}
-      </div>
-    </div>
-  );
+const MetricsPanel: ComponentType<ComponentRenderProps<MetricsPanelProps>> = (props) => {
+  return <MetricsPanelComponent {...props} />;
 };
 
 /**

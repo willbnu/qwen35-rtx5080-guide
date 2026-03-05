@@ -1,3 +1,17 @@
+import { MetricsPanel } from './components/dashboard/MetricsPanel';
+
+// Sample metrics data for demonstration
+const sampleMetrics = {
+  genTps: 45.2,
+  promptTps: 1250.5,
+  totalTokens: 1024,
+  promptTokens: 512,
+  completionTokens: 512,
+  time: 11.35,
+  averageLatency: 245,
+  requestsCount: 42,
+};
+
 function App() {
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -7,11 +21,8 @@ function App() {
       </header>
       <main className="p-6">
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {/* Metrics Panel Placeholder */}
-          <div className="rounded-lg border border-border bg-card p-6 shadow-sm">
-            <h2 className="text-lg font-medium">Metrics</h2>
-            <p className="text-muted-foreground text-sm">Performance metrics will appear here</p>
-          </div>
+          {/* Metrics Panel */}
+          <MetricsPanel {...sampleMetrics} />
           {/* Cost Panel Placeholder */}
           <div className="rounded-lg border border-border bg-card p-6 shadow-sm">
             <h2 className="text-lg font-medium">Cost/Benefit</h2>
