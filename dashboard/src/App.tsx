@@ -1,5 +1,6 @@
 import { MetricsPanel } from './components/dashboard/MetricsPanel';
 import { CostPanel } from './components/dashboard/CostPanel';
+import { ModelInfoPanel } from './components/dashboard/ModelInfoPanel';
 
 // Sample metrics data for demonstration
 const sampleMetrics = {
@@ -23,6 +24,18 @@ const sampleCosts = {
   currency: 'USD' as const,
 };
 
+// Sample model info data for demonstration
+const sampleModelInfo = {
+  name: 'Qwen2.5-7B-Instruct',
+  provider: 'Alibaba',
+  port: 8002,
+  contextWindow: 32768,
+  maxOutput: 4096,
+  speed: 'fast' as const,
+  useCase: 'General purpose chat and code assistance',
+  version: 'v2.5',
+};
+
 function App() {
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -36,11 +49,8 @@ function App() {
           <MetricsPanel {...sampleMetrics} />
           {/* Cost Panel */}
           <CostPanel {...sampleCosts} />
-          {/* Model Info Placeholder */}
-          <div className="rounded-lg border border-border bg-card p-6 shadow-sm">
-            <h2 className="text-lg font-medium">Model Info</h2>
-            <p className="text-muted-foreground text-sm">Model details will appear here</p>
-          </div>
+          {/* Model Info Panel */}
+          <ModelInfoPanel {...sampleModelInfo} />
           {/* Docs Placeholder */}
           <div className="rounded-lg border border-border bg-card p-6 shadow-sm">
             <h2 className="text-lg font-medium">Documentation</h2>
