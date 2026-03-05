@@ -34,8 +34,15 @@ build/
 logs/
 *.log
 
-# --- Archive (old superseded scripts) ---
-archive/
+
+# --- Sensitive / OS-specific ---
+.env
+.env.*
+*.secret
+Thumbs.db
+.DS_Store
+desktop.ini
+
 
 # --- Sensitive / OS-specific ---
 .env
@@ -79,6 +86,12 @@ results/benchmark_*.json
 test_results/
 results/test_results_*.json
 
+# --- Node modules ---
+node_modules/
+
 # --- Misc large downloads ---
 *.zip
 llama*.zip
+
+# Auto Claude data directory
+.auto-claude/
