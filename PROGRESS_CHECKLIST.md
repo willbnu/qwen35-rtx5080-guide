@@ -20,11 +20,11 @@
 
 ### Verified Performance (Real Benchmarks — March 4, 2026)
 
-| Server      | Port | Model        | Quant   | Context            | KV     | GPU Layers | Gen t/s      | Prompt t/s | VRAM    | Vision |
-| ----------- | ---- | ------------ | ------- | ------------------ | ------ | ---------- | ------------ | ---------- | ------- | ------ |
-| **35B-A3B** | 8002 | Q3_K_S MoE   | 3.94bpw | **152K (155,904)** | iq4_nl | 41/41 ✅   | **~125 t/s** | ~538 t/s   | ~15.4GB | ✅     |
-| **9B**      | 8003 | Q4_K_XL      | 4.9bpw  | 256K               | q8_0   | 33/33 ✅   | **~97 t/s**  | ~668 t/s   | ~10.6GB | ✅     |
-| **27B**     | 8004 | Q3_K_S dense | 3.94bpw | 64K                | iq4_nl | 65/65 ✅   | **~36 t/s**  | ~325 t/s   | ~12.9GB | ✅     |
+| Server      | Port | Model        | Quant   | Context              | KV     | GPU Layers | Gen t/s      | Prompt t/s | VRAM    | Vision |
+| ----------- | ---- | ------------ | ------- | -------------------- | ------ | ---------- | ------------ | ---------- | ------- | ------ |
+| **35B-A3B** | 8002 | Q3_K_S MoE   | 3.94bpw | **120K (practical)** | iq4_nl | 41/41 ✅   | **~120 t/s** | ~500 t/s   | ~15.4GB | ✅     |
+| **9B**      | 8003 | Q4_K_XL      | 4.9bpw  | 256K                 | q8_0   | 33/33 ✅   | **~97 t/s**  | ~668 t/s   | ~10.6GB | ✅     |
+| **27B**     | 8004 | Q3_K_S dense | 3.94bpw | **96K**              | iq4_nl | 65/65 ✅   | **~46 t/s**  | ~300 t/s   | ~14.5GB | ✅     |
 
 ### Context Size Findings — 35B-A3B (March 4, 2026 NEW)
 
@@ -46,9 +46,9 @@ Root cause: `CUDA_Host compute buffer` crosses an internal alignment threshold a
 
 | Task                    | Best Choice    | Port | Why                                                                  |
 | ----------------------- | -------------- | ---- | -------------------------------------------------------------------- |
-| **Coding / fast chat**  | 35B-A3B Q3_K_S | 8002 | **125 t/s**, MoE efficiency, **152K** ctx, vision ✅, `--parallel 1` |
+| **Coding / fast chat**  | 35B-A3B Q3_K_S | 8002 | **120 t/s**, MoE efficiency, **120K** ctx, vision ✅, `--parallel 1` |
 | **Vision / multimodal** | 9B Q4_K_XL     | 8003 | 97 t/s, **256K** ctx, vision ✅                                      |
-| **Long-form / quality** | 27B Q3_K_S     | 8004 | Dense model, best quality/token                                      |
+| **Long-form / quality** | 27B Q3_K_S     | 8004 | **46 t/s**, **96K** ctx, dense model, best quality/token             |
 
 ---
 

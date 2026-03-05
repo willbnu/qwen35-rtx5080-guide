@@ -16,7 +16,7 @@ The 35B-A3B uses a Gated DeltaNet (GDN) hybrid architecture. The default `n_para
 | -------------- | ------- | ------- | ------ | ---------- | -------- | ------------ | ---------- | ----------------------------- |
 | **35B-A3B** ✅ | Q3_K_S  | 14.2 GB | ✅     | 41/41      | **152K** | **~125 t/s** | ~538 t/s   | `--parallel 1` required       |
 | **9B**         | Q4_K_XL | 5.7 GB  | ✅     | 33/33      | **256K** | **~97 t/s**  | ~668 t/s   | q8_0 KV, full model context   |
-| **27B**        | Q3_K_S  | 12.3 GB | ✅     | 65/65      | 64K      | **~36 t/s**  | ~325 t/s   | Dense, best quality per token |
+| **27B**        | Q3_K_S  | 11.4 GB | ✅     | 65/65      | **96K**  | **~46 t/s**  | ~300 t/s   | Dense, best quality per token |
 | heretic-v1     | Q4_K_M  | 21.2 GB | ✅     | 25/41      | 32K      | ~7 t/s ⚠️    | ~66 t/s    | Decensored, VRAM-limited      |
 
 ### Historical (superseded — shown for comparison)
@@ -88,8 +88,9 @@ Port 8003: 9B Q4_K_XL + Vision
 
 ```
 Port 8004: 27B Q3_K_S + Vision
-           - 64K context, ~36 t/s
+           - 96K context, ~46 t/s
            - Dense model, best quality per token
+           - --parallel 1 recommended
 ```
 
 Switch between profiles with `start_servers_speed.bat coding|vision|quality`.
@@ -102,7 +103,7 @@ Switch between profiles with `start_servers_speed.bat coding|vision|quality`.
 | ---------------- | ----------------- | ----------- | -------- | ------------------------------------------ |
 | **Coding**       | 35B-A3B Q3_K_S    | **125 t/s** | 152K     | MoE, fastest + vision, `--parallel 1`      |
 | **Fast Vision**  | 9B Q4_K_XL        | **97 t/s**  | **256K** | Full model context, fast vision            |
-| **Quality/Long** | 27B Q3_K_S        | **36 t/s**  | 64K      | Dense, all 27B params active, best quality |
+| **Quality/Long** | 27B Q3_K_S        | **46 t/s**  | 96K      | Dense, all 27B params active, best quality |
 | **Long Context** | 9B Q4_K_XL        | **97 t/s**  | **256K** | 256K full model max                        |
 | **Uncensored**   | heretic-v1 Q4_K_M | ~7 t/s ⚠️   | 32K      | Decensored (11% refusals), needs 24GB+ GPU |
 
@@ -122,7 +123,7 @@ Switch between profiles with `start_servers_speed.bat coding|vision|quality`.
 | ------------- | :------: | :--------------: | --------------------------------------------------- |
 | MoE (35B-A3B) | `iq4_nl` |  856 MB @ 152K   | Only 10 attention layers → small KV → dequant wins  |
 | Dense (9B)    |  `q8_0`  | 4,352 MB @ 256K  | 33 attention layers → large KV → bandwidth wins     |
-| Dense (27B)   | `iq4_nl` |  1,152 MB @ 64K  | 65 layers but VRAM-constrained → iq4_nl saves space |
+| Dense (27B)   | `iq4_nl` |  1,728 MB @ 96K  | 65 layers but VRAM-constrained → iq4_nl enables 96K |
 
 > **Never mix K and V quant types.** Always set `-ctk` and `-ctv` to the same value.
 

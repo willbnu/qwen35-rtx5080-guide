@@ -92,7 +92,7 @@ A production-tested [llama.cpp](https://github.com/ggml-org/llama.cpp) setup for
 | ------------------- | --------------------------------------------------------------------------------- |
 | ⚡ Generation speed | **125.8 t/s avg · 192 t/s peak** (with `--parallel 1`)                            |
 | 📥 Prompt ingestion | **538 t/s**                                                                       |
-| 🧠 Context window   | **120K tokens (155K max) (≈152K)**                                                        |
+| 🧠 Context window   | **120K tokens (155K max) (≈152K)**                                                |
 | 👁️ Vision           | **Yes** — [mmproj](https://huggingface.co/unsloth/Qwen3.5-35B-A3B-GGUF) loaded    |
 | 💾 VRAM used        | **15.4 GB** (245 MB free)                                                         |
 | 🎮 GPU layers       | **41 / 41** — fully on GPU                                                        |
@@ -105,7 +105,7 @@ A production-tested [llama.cpp](https://github.com/ggml-org/llama.cpp) setup for
 | ------------------ | ------------------------------------------------------------------------- | :--: | :---------: | :--------: | :-----: | ---------------------------------------- |
 | 🖥️ **Coding**      | [35B-A3B Q3_K_S](https://huggingface.co/unsloth/Qwen3.5-35B-A3B-GGUF)     | 8002 | **125 t/s** |  **152K**  | 15.4 GB | [→](#️-coding--35b-a3b-q3_k_s-port-8002)  |
 | 👁️ **Vision/Chat** | [9B Q4_K_XL](https://huggingface.co/unsloth/Qwen2.5-VL-9B-Instruct-GGUF)  | 8003 | **97 t/s**  |  **256K**  | 10.6 GB | [→](#️-fast-vision--9b-q4_k_xl-port-8003) |
-| 🎯 **Quality**     | [27B Q3_K_S](https://huggingface.co/unsloth/Qwen2.5-VL-27B-Instruct-GGUF) | 8004 | **36 t/s**  |    64K     | 12.9 GB | [→](#️-quality--27b-q3_k_s-port-8004)     |
+| 🎯 **Quality**     | [27B Q3_K_S](https://huggingface.co/unsloth/Qwen2.5-VL-27B-Instruct-GGUF) | 8004 | **46 t/s**  |    96K     | 14.5 GB | [→](#️-quality--27b-q3_k_s-port-8004)     |
 
 > **⚠️ One server at a time.** The 35B alone uses 15.4 GB — no two models fit in 16 GB simultaneously.
 
@@ -122,7 +122,7 @@ This isn't just text. All three models support **vision/multimodal input** out o
 | 🖥️ Screenshot understanding |     ✅      |     ✅     |     ✅     |
 | 📊 Chart/diagram analysis   |     ✅      |     ✅     |     ✅     |
 | 🎥 Video frame analysis     |     ✅      |     ✅     |     ✅     |
-| Speed with vision           | **125 t/s** | **97 t/s** | **36 t/s** |
+| Speed with vision           | **120 t/s** | **97 t/s** | **46 t/s** |
 
 ### Quick Vision Test
 
@@ -389,14 +389,17 @@ Full 256K context ([model native max](https://huggingface.co/Qwen/Qwen2.5-VL-9B-
 ### 🎯 Quality — 27B Q3_K_S (Port 8004)
 
 ```bash
--m Qwen2.5-VL-27B-Instruct-Q3_K_S.gguf
---mmproj mmproj-Qwen2.5-VL-27B-Instruct-F16.gguf
--c 65536 -ngl 99 --flash-attn on
+-m Qwen3.5-27B-Q3_K_S.gguf
+--mmproj mmproj-27B-F16.gguf
+-c 98304 -ngl 99 --flash-attn on
 -ctk iq4_nl -ctv iq4_nl
---chat-template-kwargs '{"enable_thinking":false}'
+--parallel 1
+--reasoning-budget 0
 ```
 
-Dense model — **all 27B parameters active per token** (no MoE sparsity). Generates the highest quality output of the three but runs at 36 t/s because there's no expert routing shortcut. Use this when output quality is the priority over speed.
+Dense model — **all 27B parameters active per token** (no MoE sparsity). Generates the highest quality output of the three. **Optimized to 46 t/s** (was 36 t/s) with `--parallel 1` and 96K context. Use this when output quality is the priority over speed.
+
+> **💡 Optimization note:** The 27B benefits from `--parallel 1` (reduces recurrent state buffer) and can use 96K context with iq4_nl KV at the same 46 t/s speed as 64K.
 
 ---
 
@@ -405,12 +408,12 @@ Dense model — **all 27B parameters active per token** (no MoE sparsity). Gener
 The "35B" label is misleading. Here's the actual compute:
 
 ```
-  Dense 27B:  27B params active per token  →  36 t/s  🐢
+  Dense 27B:  27B params active per token  →  46 t/s  🐢  (optimized)
   Dense  9B:   9B params active per token  →  97 t/s  🐇
-  MoE   35B:  ~3B params active per token  → 125 t/s  🚀  (with --parallel 1)
+  MoE   35B:  ~3B params active per token  → 120 t/s  🚀  (with --parallel 1)
 ```
 
-[Qwen3.5-35B-A3B](https://huggingface.co/unsloth/Qwen3.5-35B-A3B-GGUF) has **256 experts** total, but only **8 routed + 1 shared** activate per token. Effective compute ≈ 3B parameters per forward pass — comparable to a 3B dense model. This is why a nominally "35B" model at 14.2 GB outruns a dense 27B at 12.3 GB by 3.4×.
+[Qwen3.5-35B-A3B](https://huggingface.co/unsloth/Qwen3.5-35B-A3B-GGUF) has **256 experts** total, but only **8 routed + 1 shared** activate per token. Effective compute ≈ 3B parameters per forward pass — comparable to a 3B dense model. This is why a nominally "35B" model at 14.2 GB outruns a dense 27B at 11.4 GB by 2.6×.
 
 **Architecture breakdown:**
 
@@ -742,5 +745,3 @@ This project was created through extensive hands-on benchmarking and experimenta
 _Numbers are reproducible · PRs welcome · MIT license_
 
 </div>
-
-

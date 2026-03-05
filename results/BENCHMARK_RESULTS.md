@@ -23,11 +23,11 @@ state buffers (251 MB vs 62 MB), causing **10x generation slowdown** (9 t/s inst
 
 All three models run at full speed on RTX 5080 16GB — **one at a time only**.
 
-| Model              | Config                                    | Avg Gen       | Peak          | Context  | Vision | VRAM    |
-| ------------------ | ----------------------------------------- | ------------- | ------------- | -------- | ------ | ------- |
-| **35B-A3B Q3_K_S** | 128K, iq4_nl KV, flash on, **parallel 1** | **125.8 t/s** | **192 t/s**   | **128K** | ✅     | 15.4 GB |
-| **9B Q4_K_XL**     | 256K, q8_0 KV, flash on                   | **97.5 t/s**  | **112.2 t/s** | **256K** | ✅     | 10.6 GB |
-| **27B Q3_K_S**     | 64K, iq4_nl KV, flash on                  | **36.3 t/s**  | **37.5 t/s**  | 64K      | ✅     | 12.9 GB |
+| Model              | Config                                    | Avg Gen      | Peak          | Context  | Vision | VRAM    |
+| ------------------ | ----------------------------------------- | ------------ | ------------- | -------- | ------ | ------- |
+| **35B-A3B Q3_K_S** | 120K, iq4_nl KV, flash on, **parallel 1** | **120 t/s**  | **127 t/s**   | **120K** | ✅     | 15.4 GB |
+| **9B Q4_K_XL**     | 256K, q8_0 KV, flash on                   | **97.5 t/s** | **112.2 t/s** | **256K** | ✅     | 10.6 GB |
+| **27B Q3_K_S**     | 96K, iq4_nl KV, flash on, **parallel 1**  | **45.8 t/s** | **46.5 t/s**  | 96K      | ✅     | 14.5 GB |
 
 ---
 
