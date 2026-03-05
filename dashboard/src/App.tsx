@@ -1,6 +1,7 @@
 import { MetricsPanel } from './components/dashboard/MetricsPanel';
 import { CostPanel } from './components/dashboard/CostPanel';
 import { ModelInfoPanel } from './components/dashboard/ModelInfoPanel';
+import { DocsPanel } from './components/dashboard/DocsPanel';
 
 // Sample metrics data for demonstration
 const sampleMetrics = {
@@ -36,6 +37,73 @@ const sampleModelInfo = {
   version: 'v2.5',
 };
 
+// Sample documentation data for demonstration
+const sampleDocs = {
+  categories: [
+    {
+      id: 'getting-started',
+      name: 'Getting Started',
+      description: 'Quick start guides and tutorials',
+      entries: [
+        {
+          id: 'installation',
+          title: 'Installation',
+          category: 'getting-started',
+          content: '## Installation\n\nFollow these steps to set up the LLM Chat Dashboard:\n\n1. Clone the repository\n2. Install dependencies\n3. Configure your API keys\n4. Start the development server',
+          url: null,
+          updatedAt: new Date().toISOString(),
+        },
+        {
+          id: 'quick-start',
+          title: 'Quick Start Guide',
+          category: 'getting-started',
+          content: '## Quick Start\n\nGet started with the dashboard in minutes:\n\n- Configure your model settings\n- Set up cost tracking\n- Monitor performance metrics',
+          url: null,
+          updatedAt: new Date(Date.now() - 86400000).toISOString(),
+        },
+      ],
+    },
+    {
+      id: 'api-reference',
+      name: 'API Reference',
+      description: 'API documentation and endpoints',
+      entries: [
+        {
+          id: 'chat-endpoint',
+          title: 'Chat Endpoint',
+          category: 'api-reference',
+          content: '## Chat Endpoint\n\nPOST /api/chat\n\nSend a chat message to the LLM and receive a response.',
+          url: 'https://example.com/docs/chat',
+          updatedAt: null,
+        },
+        {
+          id: 'metrics-endpoint',
+          title: 'Metrics Endpoint',
+          category: 'api-reference',
+          content: '## Metrics Endpoint\n\nGET /api/metrics\n\nRetrieve current performance metrics.',
+          url: null,
+          updatedAt: null,
+        },
+      ],
+    },
+    {
+      id: 'troubleshooting',
+      name: 'Troubleshooting',
+      description: 'Common issues and solutions',
+      entries: [
+        {
+          id: 'connection-issues',
+          title: 'Connection Issues',
+          category: 'troubleshooting',
+          content: '## Connection Issues\n\nIf you experience connection problems:\n\n1. Check your network connection\n2. Verify API credentials\n3. Check server logs',
+          url: null,
+          updatedAt: null,
+        },
+      ],
+    },
+  ],
+};
+
 function App() {
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -51,11 +119,8 @@ function App() {
           <CostPanel {...sampleCosts} />
           {/* Model Info Panel */}
           <ModelInfoPanel {...sampleModelInfo} />
-          {/* Docs Placeholder */}
-          <div className="rounded-lg border border-border bg-card p-6 shadow-sm">
-            <h2 className="text-lg font-medium">Documentation</h2>
-            <p className="text-muted-foreground text-sm">Docs will appear here</p>
-          </div>
+          {/* Docs Panel */}
+          <DocsPanel {...sampleDocs} />
         </div>
       </main>
     </div>
