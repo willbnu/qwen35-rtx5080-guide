@@ -1,4 +1,5 @@
 import { MetricsPanel } from './components/dashboard/MetricsPanel';
+import { CostPanel } from './components/dashboard/CostPanel';
 
 // Sample metrics data for demonstration
 const sampleMetrics = {
@@ -12,6 +13,16 @@ const sampleMetrics = {
   requestsCount: 42,
 };
 
+// Sample cost data for demonstration
+const sampleCosts = {
+  inputCost: 0.015,
+  outputCost: 0.030,
+  totalCost: 0.045,
+  costPerRequest: 0.00107,
+  costPer1kTokens: 0.044,
+  currency: 'USD' as const,
+};
+
 function App() {
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -23,11 +34,8 @@ function App() {
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {/* Metrics Panel */}
           <MetricsPanel {...sampleMetrics} />
-          {/* Cost Panel Placeholder */}
-          <div className="rounded-lg border border-border bg-card p-6 shadow-sm">
-            <h2 className="text-lg font-medium">Cost/Benefit</h2>
-            <p className="text-muted-foreground text-sm">Cost analysis will appear here</p>
-          </div>
+          {/* Cost Panel */}
+          <CostPanel {...sampleCosts} />
           {/* Model Info Placeholder */}
           <div className="rounded-lg border border-border bg-card p-6 shadow-sm">
             <h2 className="text-lg font-medium">Model Info</h2>
