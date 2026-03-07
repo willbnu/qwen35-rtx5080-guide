@@ -238,11 +238,11 @@ If you update numbers or claims:
 
 This repo now uses a two-worktree local workflow:
 
-- `C:\Users\Admin\Documents\Projects\qwen-llm` is the personal dev workspace on `personal/dev`
-- `C:\Users\Admin\Documents\Projects\qwen-llm-release` is the clean release workspace on `main`
-- normal work happens in the dev workspace
-- only reviewed commits get cherry-picked into the release workspace
-- only the release workspace is allowed to push to GitHub
+- use one dev worktree on `personal/dev` for everyday development
+- use a separate release worktree on `main` for clean review and pushes
+- keep the two worktrees as sibling folders on the same machine
+- only reviewed commits get cherry-picked into the release worktree
+- only the release worktree is allowed to push to GitHub
 
 Windows helper scripts:
 
@@ -255,7 +255,7 @@ scripts/windows/push-release.ps1
 
 Recommended flow:
 
-1. Work and commit in `qwen-llm` on `personal/dev`
-2. Promote selected commits into `qwen-llm-release`
+1. Work and commit in the dev worktree on `personal/dev`
+2. Promote selected commits into the release worktree
 3. Run the release checks there
-4. Push only from `qwen-llm-release`
+4. Push only from the release worktree

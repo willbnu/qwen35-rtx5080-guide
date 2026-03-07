@@ -37,10 +37,10 @@ scripts/windows/push-release.ps1
 ```
 
 **Rules:**
-- Do normal work in `qwen-llm` on `personal/dev`
+- Do normal work in the dev worktree on `personal/dev`
 - Do not push from the dev workspace
-- Promote only reviewed commits into `qwen-llm-release`
-- Push only from `qwen-llm-release`
+- Promote only reviewed commits into the release worktree
+- Push only from the release worktree
 
 ### Server Management (Windows)
 

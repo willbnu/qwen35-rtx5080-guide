@@ -81,8 +81,8 @@ cd dashboard && npm run lint
 
 Repository maintainers use a two-worktree setup locally:
 
-- `qwen-llm` on `personal/dev` for normal development
-- `qwen-llm-release` on `main` for clean review and pushes
+- a dev worktree on `personal/dev` for normal development
+- a separate release worktree on `main` for clean review and pushes
 
 Windows helper scripts:
 
@@ -95,11 +95,11 @@ scripts/windows/push-release.ps1
 
 Maintainer rules:
 
-1. Do everyday work in `qwen-llm`
+1. Do everyday work in the dev worktree
 2. Never push from the dev workspace
-3. Promote only reviewed commits into `qwen-llm-release`
-4. Run release checks in `qwen-llm-release`
-5. Push only from `qwen-llm-release`
+3. Promote only reviewed commits into the release worktree
+4. Run release checks in the release worktree
+5. Push only from the release worktree
 
 ## Commit Convention
 
