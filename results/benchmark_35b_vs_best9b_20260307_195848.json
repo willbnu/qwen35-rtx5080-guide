@@ -1,0 +1,100 @@
+{
+  "timestamp": "2026-03-07T19:58:28.165008",
+  "binary": "D:\\Projects\\qwen-llm-git\\llama.cpp\\build-sm120\\bin\\Release\\llama-server.exe",
+  "runs": [
+    {
+      "key": "35b_best",
+      "model": "D:\\Projects\\qwen-llm-git\\models\\unsloth-gguf\\Qwen3.5-35B-A3B-Q3_K_S.gguf",
+      "context": 65536,
+      "cache": "iq4_nl",
+      "prelaunch_vram": {
+        "free_mib": 15977,
+        "used_mib": 0
+      },
+      "log_path": "D:\\Projects\\qwen-llm-git\\logs\\35b_best_20260307_195828.log",
+      "cases": {
+        "reasoning": {
+          "elapsed_s": 0.92,
+          "prompt_tokens": 49,
+          "completion_tokens": 96,
+          "prompt_tps": 893.64,
+          "gen_tps": 112.55,
+          "content_preview": "It would take **5 minutes**.\n\nHere is the logic:\n1.  If 5 machines make 5 widgets in 5 minutes, that means **1 machine makes 1 widget in 5 minutes**.\n2.  If you"
+        },
+        "coding": {
+          "elapsed_s": 1.79,
+          "prompt_tokens": 37,
+          "completion_tokens": 192,
+          "prompt_tps": 762.62,
+          "gen_tps": 110.86,
+          "content_preview": "```python\nfrom collections import defaultdict\n\ndef group_by_key(dict_list, key):\n    \"\"\"\n    Groups a list of dictionaries by a given key.\n\n    Args:\n        di"
+        },
+        "vision": {
+          "elapsed_s": 0.49,
+          "prompt_tokens": 52,
+          "completion_tokens": 38,
+          "prompt_tps": 361.57,
+          "gen_tps": 113.61,
+          "content_preview": "The image is a solid, uniform field of color with no objects, patterns, or gradients.\n\n**Dominant color:** Blue (specifically, a vibrant, pure blue)."
+        }
+      },
+      "postrun_vram": {
+        "free_mib": 15977,
+        "used_mib": 0
+      }
+    },
+    {
+      "key": "9b_q8_0_bestweights",
+      "model": "D:\\Projects\\qwen-llm-git\\models\\bartowski-9b\\Qwen_Qwen3.5-9B-Q8_0.gguf",
+      "context": 262144,
+      "cache": "q8_0",
+      "prelaunch_vram": {
+        "free_mib": 15977,
+        "used_mib": 0
+      },
+      "log_path": "D:\\Projects\\qwen-llm-git\\logs\\9b_q8_0_bestweights_20260307_195839.log",
+      "cases": {
+        "reasoning": {
+          "elapsed_s": 1.15,
+          "prompt_tokens": 49,
+          "completion_tokens": 85,
+          "prompt_tps": 1415.29,
+          "gen_tps": 78.13,
+          "content_preview": "5 minutes.\n\n**Reasoning:**\n*   If 5 machines make 5 widgets in 5 minutes, then **1 machine makes 1 widget in 5 minutes**.\n*   With 100 machines working simultan"
+        },
+        "coding": {
+          "elapsed_s": 2.49,
+          "prompt_tokens": 37,
+          "completion_tokens": 189,
+          "prompt_tps": 1280.9,
+          "gen_tps": 77.78,
+          "content_preview": "```python\nfrom collections import defaultdict\n\ndef group_by(data, key):\n    \"\"\"Group a list of dictionaries by a specified key.\"\"\"\n    result = defaultdict(list"
+        },
+        "vision": {
+          "elapsed_s": 0.33,
+          "prompt_tokens": 52,
+          "completion_tokens": 18,
+          "prompt_tps": 625.73,
+          "gen_tps": 80.25,
+          "content_preview": "The image is a solid block of pure blue. The dominant color is blue."
+        }
+      },
+      "postrun_vram": {
+        "free_mib": 15977,
+        "used_mib": 0
+      }
+    }
+  ],
+  "summary_gen_tps": {
+    "35b_best": {
+      "reasoning": 112.55,
+      "coding": 110.86,
+      "vision": 113.61
+    },
+    "9b_q8_0_bestweights": {
+      "reasoning": 78.13,
+      "coding": 77.78,
+      "vision": 80.25
+    }
+  }
+}

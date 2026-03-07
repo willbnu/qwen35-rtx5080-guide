@@ -1,7 +1,7 @@
 # AGENTS.md
 
 **Project**: qwen-llm (Qwen3.5 Local LLM on 16GB GPU)
-**Version**: 1.6.2
+**Version**: 1.6.3
 **Purpose**: Configuration, benchmarking, and tooling for running Qwen3.5 models locally
 
 ---
@@ -15,6 +15,15 @@ This project provides production-ready configurations and tooling for running Qw
 - Python API helper for programmatic access
 - React dashboard for monitoring
 - Windows batch scripts for easy server management
+
+Recent validated conclusions on the RTX 5080 16GB box:
+
+- Best overall model: `Qwen3.5-35B-A3B-Q3_K_S.gguf`
+- Best 27B preset: `Qwen3.5-27B-IQ4_XS.gguf` with `iq4_nl`
+- Best practical 9B preset: `Qwen3.5-9B-UD-Q4_K_XL.gguf` with `q8_0`
+- Best strongest-weight 9B tested: `Qwen_Qwen3.5-9B-Q8_0.gguf` with `q8_0`
+- Best 35B long-context test that still works on this machine: `256K` with `iq4_nl`
+- Always benchmark from a purged, post-idle state and record VRAM before launch
 
 ---
 
@@ -95,6 +104,14 @@ python tests/compare_models.py
 
 # Vision/multimodal test
 python tests/vision_test.py
+
+# Local comparison helpers
+powershell -ExecutionPolicy Bypass -File scripts/windows/purge-vram.ps1
+python tests/benchmark_64k_compare.py
+python tests/benchmark_iq4xs_vision.py
+python tests/benchmark_vision_models.py
+python tests/benchmark_custom_models.py
+python tests/find_max_context_27b.py
 ```
 
 ### Unit Tests
@@ -173,9 +190,9 @@ qwen-llm/
 
 | Profile | Port | Model | Speed | Context | Best For |
 |---------|------|-------|-------|---------|----------|
-| **Coding** | 8002 | Qwen3.5-35B-A3B Q3_K_S | ~125 t/s | 120K | Primary coding, reasoning |
-| **Fast Vision** | 8003 | Qwen3.5-9B UD-Q4_K_XL | ~97 t/s | 256K | Fast vision, chat |
-| **Quality** | 8004 | Qwen3.5-27B Q3_K_S | ~46 t/s | 96K | Best reasoning quality |
+| **Coding** | 8002 | Qwen3.5-35B-A3B Q3_K_S | ~110-114 t/s | 64K-120K | Primary coding, reasoning |
+| **Fast Vision** | 8003 | Qwen3.5-9B UD-Q4_K_XL | ~105-106 t/s | 256K | Fast vision, chat, huge context |
+| **Quality** | 8004 | Qwen3.5-27B Q3_K_S | ~46 t/s | 96K | Conservative 27B vision preset |
 
 ### Critical Configuration Notes
 
@@ -188,6 +205,18 @@ qwen-llm/
 4. **KV Cache settings**:
    - MoE (35B): Use `iq4_nl` (small KV, dequant speed wins)
    - Dense (9B, 27B): Use `q8_0` (large KV, bandwidth wins)
+
+5. **Current best known configurations**:
+   - 35B daily driver: `Q3_K_S + iq4_nl + 64K`
+   - 35B max-context experiment: `Q3_K_S + iq4_nl + 256K`
+   - 27B best speed/quality: `IQ4_XS + iq4_nl + 32K`
+   - 27B best longer-context tested: `IQ4_XS + iq4_nl + 64K`
+   - 9B best practical: `UD-Q4_K_XL + q8_0 + 256K`
+   - 9B strongest-weight tested: `Q8_0 + q8_0 + 256K`
+
+6. **Post-reboot baseline matters**:
+   - Best runs came from a clean RTX 5080 state with about `15977 MiB free` and `0 MiB used`
+   - If benchmark numbers suddenly collapse, reboot or fully reset the runtime before trusting results
 
 ### Configuration File
 
@@ -325,6 +354,24 @@ npx tsc --noEmit  # Type check only
 - Reports: avg time, avg gen t/s, avg prompt t/s
 - Results saved as JSON files
 
+### Benchmark Memory Discipline
+
+For every serious benchmark, record all of these:
+
+- `nvidia-smi` free/used VRAM before launch
+- `llama.cpp` projected device memory use
+- `llama.cpp` free device memory seen during fit
+- KV buffer size
+- recurrent-state buffer size for hybrid/GDN models
+
+Use [purge-vram.ps1](D:\Projects\qwen-llm-git\scripts\windows\purge-vram.ps1) before each run.
+
+Important interpretation rules:
+
+- `nvidia-smi` free VRAM is the system baseline
+- `llama.cpp` free device memory is the runtime's effective fit number
+- a model can still run even when it fails the comfort target, but that means the config is edge-fit, not roomy
+
 ### Health Checks
 
 - `health_check.py`: Verifies all configured servers respond
@@ -364,6 +411,12 @@ Defined in `config/servers.yaml` under `quality_tests`:
 - 35B coding server uses 15.4GB (only 245MB free)
 - Cannot run multiple servers simultaneously on 16GB
 - Use profiles to select single server for current task
+
+### 4b. Edge-fit warning
+
+- `35B @ 256K + iq4_nl` is validated on this machine, but it is still a tight-fit configuration
+- treat it as a benchmark / special-purpose profile, not the safest default
+- `27B IQ4_XS + mmproj + iq4_nl + 64K` also works, but is a tight-fit 27B vision profile rather than the conservative fallback
 
 ### 5. Flash Attention
 
@@ -460,6 +513,15 @@ presence_penalty=1.5, repetition_penalty=1.0
 | `docs/RTX5080-NATIVE-BUILD.md` | SM120 native build guide |
 | `docs/KV_CACHE_ANALYSIS.md` | KV cache quantization deep-dive |
 | `docs/PERFORMANCE_MATRIX.md` | Performance comparison table |
+
+Recent benchmark artifacts worth citing:
+
+| File | Purpose |
+|------|---------|
+| `results/best_models_27b32k_20260307_194413.json` | Best 27B rerun at 32K |
+| `results/benchmark_9b_power_20260307_195552.json` | 9B quant comparison: UD-Q4_K_XL vs Q6_K vs Q8_0 |
+| `results/benchmark_35b_vs_best9b_20260307_195848.json` | 35B vs strongest-weight 9B |
+| `results/benchmark_35b256k_vs_9b256k_20260307_200226.json` | 35B 256K vs strongest-weight 9B 256K |
 
 ---
 

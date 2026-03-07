@@ -1,0 +1,146 @@
+{
+  "timestamp": "2026-03-07T19:43:33.496441",
+  "binary": "D:\\Projects\\qwen-llm-git\\llama.cpp\\build-sm120\\bin\\Release\\llama-server.exe",
+  "runs": [
+    {
+      "key": "35b_best",
+      "model": "Qwen3.5-35B-A3B-Q3_K_S.gguf",
+      "context": 65536,
+      "cache": "iq4_nl",
+      "prelaunch_vram": {
+        "free_mib": 15977,
+        "used_mib": 0
+      },
+      "log_path": "D:\\Projects\\qwen-llm-git\\logs\\35b_best_20260307_194333.log",
+      "cases": {
+        "reasoning": {
+          "elapsed_s": 0.92,
+          "prompt_tokens": 49,
+          "completion_tokens": 96,
+          "prompt_tps": 865.02,
+          "gen_tps": 112.38,
+          "content_preview": "5 minutes.\n\n**Reasoning:**\n1.  **Rate per machine:** If 5 machines make 5 widgets in 5 minutes, that means each machine makes 1 widget in 5 "
+        },
+        "coding": {
+          "elapsed_s": 1.79,
+          "prompt_tokens": 37,
+          "completion_tokens": 192,
+          "prompt_tps": 762.26,
+          "gen_tps": 110.81,
+          "content_preview": "```python\nfrom collections import defaultdict\n\ndef group_by_key(data, key):\n    \"\"\"\n    Groups a list of dictionaries by a given key.\n\n    A"
+        },
+        "vision": {
+          "elapsed_s": 0.34,
+          "prompt_tokens": 52,
+          "completion_tokens": 22,
+          "prompt_tps": 363.45,
+          "gen_tps": 117.19,
+          "content_preview": "The image is a solid, uniform field of pure blue.\n\nDominant color: **Blue**"
+        }
+      },
+      "postrun_vram": {
+        "free_mib": 15977,
+        "used_mib": 0
+      }
+    },
+    {
+      "key": "27b_best_32k",
+      "model": "Qwen3.5-27B-IQ4_XS.gguf",
+      "context": 32768,
+      "cache": "iq4_nl",
+      "prelaunch_vram": {
+        "free_mib": 15977,
+        "used_mib": 0
+      },
+      "log_path": "D:\\Projects\\qwen-llm-git\\logs\\27b_best_32k_20260307_194353.log",
+      "cases": {
+        "reasoning": {
+          "elapsed_s": 1.39,
+          "prompt_tokens": 49,
+          "completion_tokens": 53,
+          "prompt_tps": 687.8,
+          "gen_tps": 40.83,
+          "content_preview": "5 minutes.\n\nSince 5 machines make 5 widgets in 5 minutes, each machine takes 5 minutes to make one widget. Therefore, 100 machines can produ"
+        },
+        "coding": {
+          "elapsed_s": 1.61,
+          "prompt_tokens": 37,
+          "completion_tokens": 62,
+          "prompt_tps": 585.12,
+          "gen_tps": 40.67,
+          "content_preview": "```python\ndef group_by_key(data, key):\n    \"\"\"Group a list of dictionaries by a specified key.\"\"\"\n    grouped = {}\n    for item in data:\n   "
+        },
+        "vision": {
+          "elapsed_s": 0.77,
+          "prompt_tokens": 52,
+          "completion_tokens": 24,
+          "prompt_tps": 292.24,
+          "gen_tps": 41.85,
+          "content_preview": "The image is a solid, uniform field of color with no objects or patterns. The dominant color is blue."
+        }
+      },
+      "postrun_vram": {
+        "free_mib": 15977,
+        "used_mib": 0
+      }
+    },
+    {
+      "key": "9b_best",
+      "model": "Qwen3.5-9B-UD-Q4_K_XL.gguf",
+      "context": 262144,
+      "cache": "q8_0",
+      "prelaunch_vram": {
+        "free_mib": 15977,
+        "used_mib": 0
+      },
+      "log_path": "D:\\Projects\\qwen-llm-git\\logs\\9b_best_20260307_194405.log",
+      "cases": {
+        "reasoning": {
+          "elapsed_s": 0.71,
+          "prompt_tokens": 50,
+          "completion_tokens": 70,
+          "prompt_tps": 1748.44,
+          "gen_tps": 106.0,
+          "content_preview": "5 minutes.\n\n**Reasoning:**\nIf 5 machines make 5 widgets in 5 minutes, it means **one machine** makes **one widget** in **5 minutes**. Theref"
+        },
+        "coding": {
+          "elapsed_s": 1.88,
+          "prompt_tokens": 38,
+          "completion_tokens": 192,
+          "prompt_tps": 1418.6,
+          "gen_tps": 105.21,
+          "content_preview": "```python\nfrom collections import defaultdict\n\ndef group_by_key(data, key):\n    \"\"\"\n    Groups a list of dictionaries by a specified key.\n  "
+        },
+        "vision": {
+          "elapsed_s": 0.32,
+          "prompt_tokens": 53,
+          "completion_tokens": 23,
+          "prompt_tps": 754.61,
+          "gen_tps": 106.89,
+          "content_preview": "The image is a solid, uniform field with no discernible objects or details. Its dominant color is blue."
+        }
+      },
+      "postrun_vram": {
+        "free_mib": 15977,
+        "used_mib": 0
+      }
+    }
+  ],
+  "summary_gen_tps": {
+    "35b_best": {
+      "reasoning": 112.38,
+      "coding": 110.81,
+      "vision": 117.19
+    },
+    "27b_best_32k": {
+      "reasoning": 40.83,
+      "coding": 40.67,
+      "vision": 41.85
+    },
+    "9b_best": {
+      "reasoning": 106.0,
+      "coding": 105.21,
+      "vision": 106.89
+    }
+  }
+}

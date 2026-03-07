@@ -93,6 +93,10 @@ results/custom_benchmark_*.json
 results/experimental_compare_*.json
 results/quick_benchmark_*.json
 results/vision_benchmark_*.json
+!results/best_models_27b32k_20260307_194413.json
+!results/benchmark_9b_power_20260307_195552.json
+!results/benchmark_35b_vs_best9b_20260307_195848.json
+!results/benchmark_35b256k_vs_9b256k_20260307_200226.json
 !results/benchmark_35b_128k_vis_final_20260304.json
 !results/benchmark_35b_152k_vis_final_20260304.json
 !results/benchmark_port8003_20260304_193218.json

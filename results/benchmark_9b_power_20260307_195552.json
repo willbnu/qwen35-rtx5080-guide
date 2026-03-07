@@ -1,0 +1,147 @@
+{
+  "timestamp": "2026-03-07T19:55:27.336375",
+  "binary": "D:\\Projects\\qwen-llm-git\\llama.cpp\\build-sm120\\bin\\Release\\llama-server.exe",
+  "mmproj": "D:\\Projects\\qwen-llm-git\\models\\unsloth-gguf\\mmproj-F16.gguf",
+  "runs": [
+    {
+      "key": "9b_ud_q4xl",
+      "model": "D:\\Projects\\qwen-llm-git\\models\\unsloth-gguf\\Qwen3.5-9B-UD-Q4_K_XL.gguf",
+      "context": 262144,
+      "cache": "q8_0",
+      "prelaunch_vram": {
+        "free_mib": 15977,
+        "used_mib": 0
+      },
+      "log_path": "D:\\Projects\\qwen-llm-git\\logs\\9b_ud_q4xl_20260307_195527.log",
+      "cases": {
+        "reasoning": {
+          "elapsed_s": 0.63,
+          "prompt_tokens": 50,
+          "completion_tokens": 61,
+          "prompt_tps": 1745.81,
+          "gen_tps": 105.57,
+          "content_preview": "It would take **5 minutes**.\n\n**Reasoning:**\nEach machine produces one widget in five minutes. Therefore, if you have 100 machines working simultaneously, each "
+        },
+        "coding": {
+          "elapsed_s": 1.87,
+          "prompt_tokens": 38,
+          "completion_tokens": 192,
+          "prompt_tps": 1171.43,
+          "gen_tps": 105.35,
+          "content_preview": "```python\nfrom collections import defaultdict\n\ndef group_by_key(data, key):\n    \"\"\"\n    Groups a list of dictionaries by the specified key.\n    \n    Args:\n     "
+        },
+        "vision": {
+          "elapsed_s": 0.75,
+          "prompt_tokens": 53,
+          "completion_tokens": 69,
+          "prompt_tps": 725.47,
+          "gen_tps": 105.72,
+          "content_preview": "The image is a solid, uniform field of **blue** \u2014 specifically, a vibrant royal or cobalt blue with no gradients, patterns, or objects.  \n\n\u2705 **Dominant color**:"
+        }
+      },
+      "postrun_vram": {
+        "free_mib": 15977,
+        "used_mib": 0
+      }
+    },
+    {
+      "key": "9b_q6k",
+      "model": "D:\\Projects\\qwen-llm-git\\models\\bartowski-9b\\Qwen_Qwen3.5-9B-Q6_K.gguf",
+      "context": 262144,
+      "cache": "q8_0",
+      "prelaunch_vram": {
+        "free_mib": 15977,
+        "used_mib": 0
+      },
+      "log_path": "D:\\Projects\\qwen-llm-git\\logs\\9b_q6k_20260307_195535.log",
+      "cases": {
+        "reasoning": {
+          "elapsed_s": 0.48,
+          "prompt_tokens": 49,
+          "completion_tokens": 37,
+          "prompt_tps": 1490.0,
+          "gen_tps": 89.18,
+          "content_preview": "5 minutes.\n\nEach machine makes one widget in five minutes. So 100 machines will each make one widget in five minutes, totaling 100 widgets."
+        },
+        "coding": {
+          "elapsed_s": 2.01,
+          "prompt_tokens": 37,
+          "completion_tokens": 172,
+          "prompt_tps": 1183.47,
+          "gen_tps": 88.18,
+          "content_preview": "```python\nfrom collections import defaultdict\n\ndef group_by(data, key):\n    \"\"\"Group a list of dictionaries by a specified key.\"\"\"\n    grouped = defaultdict(lis"
+        },
+        "vision": {
+          "elapsed_s": 0.51,
+          "prompt_tokens": 52,
+          "completion_tokens": 36,
+          "prompt_tps": 657.15,
+          "gen_tps": 88.39,
+          "content_preview": "The image is a solid, uniform field of bright blue with no other features or objects visible.\n\n**Dominant Color:** Blue (specifically a vibrant royal blue)."
+        }
+      },
+      "postrun_vram": {
+        "free_mib": 15977,
+        "used_mib": 0
+      }
+    },
+    {
+      "key": "9b_q8_0",
+      "model": "D:\\Projects\\qwen-llm-git\\models\\bartowski-9b\\Qwen_Qwen3.5-9B-Q8_0.gguf",
+      "context": 262144,
+      "cache": "q8_0",
+      "prelaunch_vram": {
+        "free_mib": 15977,
+        "used_mib": 0
+      },
+      "log_path": "D:\\Projects\\qwen-llm-git\\logs\\9b_q8_0_20260307_195544.log",
+      "cases": {
+        "reasoning": {
+          "elapsed_s": 1.29,
+          "prompt_tokens": 49,
+          "completion_tokens": 95,
+          "prompt_tps": 1604.82,
+          "gen_tps": 77.12,
+          "content_preview": "**5 minutes.**\n\nHere's why:\n- If **5 machines** make **5 widgets** in **5 minutes**, then each machine makes **1 widget** in **5 minutes**.\n- So, **100 machines"
+        },
+        "coding": {
+          "elapsed_s": 0.86,
+          "prompt_tokens": 37,
+          "completion_tokens": 62,
+          "prompt_tps": 1300.3,
+          "gen_tps": 77.7,
+          "content_preview": "```python\nfrom collections import defaultdict\n\ndef group_by(data, key):\n    \"\"\"Group a list of dictionaries by the specified key.\"\"\"\n    grouped = defaultdict(l"
+        },
+        "vision": {
+          "elapsed_s": 0.43,
+          "prompt_tokens": 52,
+          "completion_tokens": 26,
+          "prompt_tps": 624.53,
+          "gen_tps": 78.8,
+          "content_preview": "The image is a solid, uniform field of blue with no discernible objects or patterns. The dominant color is blue."
+        }
+      },
+      "postrun_vram": {
+        "free_mib": 15977,
+        "used_mib": 0
+      }
+    }
+  ],
+  "summary_gen_tps": {
+    "9b_ud_q4xl": {
+      "reasoning": 105.57,
+      "coding": 105.35,
+      "vision": 105.72
+    },
+    "9b_q6k": {
+      "reasoning": 89.18,
+      "coding": 88.18,
+      "vision": 88.39
+    },
+    "9b_q8_0": {
+      "reasoning": 77.12,
+      "coding": 77.7,
+      "vision": 78.8
+    }
+  }
+}

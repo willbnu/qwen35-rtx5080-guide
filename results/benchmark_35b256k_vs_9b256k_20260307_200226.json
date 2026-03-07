@@ -1,0 +1,91 @@
+{
+  "timestamp": "2026-03-07T20:02:05.457827",
+  "runs": [
+    {
+      "key": "35b_256k_best",
+      "context": 262144,
+      "cache": "iq4_nl",
+      "pre": {
+        "free_mib": 15977,
+        "used_mib": 0
+      },
+      "log": "D:\\Projects\\qwen-llm-git\\logs\\35b_256k_best_20260307_200205.log",
+      "cases": {
+        "reasoning": {
+          "elapsed_s": 1.11,
+          "prompt_tps": 874.66,
+          "gen_tps": 91.26,
+          "completion_tokens": 96,
+          "preview": "5 minutes.\n\nHere is the reasoning:\n1.  **5 machines** make **5 widgets** in **5 minutes**. This means each machine makes **1 widget** in **5"
+        },
+        "coding": {
+          "elapsed_s": 2.19,
+          "prompt_tps": 756.23,
+          "gen_tps": 90.03,
+          "completion_tokens": 192,
+          "preview": "```python\nfrom collections import defaultdict\n\ndef group_by_key(list_of_dicts, key):\n    \"\"\"\n    Groups a list of dictionaries by a specifie"
+        },
+        "vision": {
+          "elapsed_s": 0.75,
+          "prompt_tps": 157.23,
+          "gen_tps": 92.73,
+          "completion_tokens": 38,
+          "preview": "The image is a solid, uniform field of color with no objects, patterns, or gradients.\n\n**Dominant color:** Blue (specifically, a bright, sat"
+        }
+      },
+      "post": {
+        "free_mib": 15977,
+        "used_mib": 0
+      }
+    },
+    {
+      "key": "9b_256k_bestweights",
+      "context": 262144,
+      "cache": "q8_0",
+      "pre": {
+        "free_mib": 15977,
+        "used_mib": 0
+      },
+      "log": "D:\\Projects\\qwen-llm-git\\logs\\9b_256k_bestweights_20260307_200217.log",
+      "cases": {
+        "reasoning": {
+          "elapsed_s": 0.52,
+          "prompt_tps": 1545.99,
+          "gen_tps": 78.78,
+          "completion_tokens": 36,
+          "preview": "5 minutes.\n\nEach machine makes one widget in five minutes. So 100 machines each make one widget in five minutes, totaling 100 widgets."
+        },
+        "coding": {
+          "elapsed_s": 2.52,
+          "prompt_tps": 1197.33,
+          "gen_tps": 77.88,
+          "completion_tokens": 192,
+          "preview": "```python\ndef group_by(data, key):\n    \"\"\"\n    Groups a list of dictionaries by the specified key.\n\n    Args:\n        data (list): List of d"
+        },
+        "vision": {
+          "elapsed_s": 0.63,
+          "prompt_tps": 479.27,
+          "gen_tps": 78.81,
+          "completion_tokens": 39,
+          "preview": "The image is a solid, uniform block of color with no discernible objects or patterns. The dominant color is a vibrant, medium blue (often re"
+        }
+      },
+      "post": {
+        "free_mib": 15977,
+        "used_mib": 0
+      }
+    }
+  ],
+  "summary_gen_tps": {
+    "35b_256k_best": {
+      "reasoning": 91.26,
+      "coding": 90.03,
+      "vision": 92.73
+    },
+    "9b_256k_bestweights": {
+      "reasoning": 78.78,
+      "coding": 77.88,
+      "vision": 78.81
+    }
+  }
+}
