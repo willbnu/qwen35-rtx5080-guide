@@ -87,6 +87,12 @@ start_*_test.bat
 # --- Raw benchmark JSON ---
 benchmark_*.json
 results/benchmark_*.json
+results/best_models_*.json
+results/context_sweep_*.json
+results/custom_benchmark_*.json
+results/experimental_compare_*.json
+results/quick_benchmark_*.json
+results/vision_benchmark_*.json
 !results/benchmark_35b_128k_vis_final_20260304.json
 !results/benchmark_35b_152k_vis_final_20260304.json
 !results/benchmark_port8003_20260304_193218.json
@@ -106,7 +112,9 @@ __pycache__/
 
 # --- AI tool configs (personal) ---
 opencode.json
+.claude/
 .claude*.json
+.mcp.json
 .config/
 .local/
 .tools/
