@@ -18,6 +18,16 @@ It stays strict about evidence, but it should still feel useful at a glance: wha
 | Benchmark numbers | Backed by checked-in JSON artifacts |
 | Cross-GPU claims | Treated as estimates until reproduced elsewhere |
 
+## Quick Links
+
+- [Why this repo exists](#why-this-repo-exists)
+- [Recommended presets](#recommended-presets)
+- [Reference measurements](#reference-measurements)
+- [Quick start](#quick-start)
+- [Terminal chat and API helper](#terminal-chat-and-api-helper)
+- [Context guidance](#context-guidance)
+
+<a id="why-this-repo-exists"></a>
 ## Why This Repo Exists 🚀
 
 - The 35B preset is the main attraction: a practical local coding model that still feels fast on a single 16GB GPU.
@@ -45,6 +55,7 @@ It stays strict about evidence, but it should still feel useful at a glance: wha
 - Full multimodal throughput parity between text-only and image requests.
 - Direct PDF or video pipelines. In practice those need preprocessing to images first.
 
+<a id="recommended-presets"></a>
 ## Recommended Presets 🎯
 
 | Key | Port | Model | Default Context | Estimated VRAM | Use |
@@ -55,6 +66,7 @@ It stays strict about evidence, but it should still feel useful at a glance: wha
 
 The canonical settings live in [config/servers.yaml](config/servers.yaml).
 
+<a id="reference-measurements"></a>
 ## Reference Measurements 📊
 
 Checked-in artifacts for the 35B preset:
@@ -82,6 +94,7 @@ Additional notes and historical summaries are in:
 
 If a narrative doc and a checked-in JSON file disagree, prefer the raw JSON artifact.
 
+<a id="quick-start"></a>
 ## Quick Start ⚡
 
 ### 1. Install `llama.cpp`
@@ -158,6 +171,7 @@ python tests/vision_test.py path/to/image.png
 
 Note: `vision_test.py` sends actual image requests. `simple_benchmark.py` does not.
 
+<a id="terminal-chat-and-api-helper"></a>
 ## Terminal Chat and API Helper 💬
 
 Terminal chat:
@@ -190,6 +204,7 @@ vision = api_9b_vision.vision(
 )
 ```
 
+<a id="context-guidance"></a>
 ## Context Guidance 🧠
 
 - The repo default is 120K for the 35B preset because it leaves more Windows headroom than the 155,904-token ceiling case.
