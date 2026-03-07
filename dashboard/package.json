@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@json-render/core": "^0.11.0",
+    "@json-render/core": "^0.12.0",
     "@json-render/react": "^0.11.0",
     "@json-render/shadcn": "^0.11.0",
     "@json-render/zustand": "^0.11.0",
