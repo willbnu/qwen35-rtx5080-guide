@@ -108,6 +108,15 @@ function Get-GitleaksExe {
     throw "gitleaks was not found. Install it with: winget install --id Gitleaks.Gitleaks -e"
 }
 
+function Get-SemgrepExe {
+    $semgrep = Get-Command semgrep -ErrorAction SilentlyContinue
+    if ($semgrep) {
+        return $semgrep.Source
+    }
+
+    throw "semgrep was not found. Install it with: pip install semgrep"
+}
+
 function Get-NpmInvoker {
     param(
         [string]$RepoRoot = (Get-RepoRoot)
@@ -168,15 +177,15 @@ function Invoke-Semgrep {
         [string]$RepoRoot = (Get-RepoRoot)
     )
 
-    $pythonExe = Get-PythonExe
+    $semgrepExe = Get-SemgrepExe
     $originalUtf8 = $env:PYTHONUTF8
     $originalEncoding = $env:PYTHONIOENCODING
     $env:PYTHONUTF8 = "1"
     $env:PYTHONIOENCODING = "utf-8"
 
     try {
-        Invoke-Checked -Exe $pythonExe -Arguments @(
-            "-m", "semgrep", "scan",
+        Invoke-Checked -Exe $semgrepExe -Arguments @(
+            "scan",
             "--config", "auto",
             ".",
             "--exclude", ".tools",
