@@ -6,7 +6,6 @@ Uses the unified configuration system.
 import subprocess
 import sys
 import time
-import os
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
@@ -21,49 +20,7 @@ LOGS_DIR.mkdir(exist_ok=True)
 def build_server_command(server: ServerConfig) -> list:
     """Build the llama-server command for a server"""
     config = get_config()
-
-    cmd = [
-        str(config.llama_dir / "llama-server.exe"),
-        "-m",
-        str(server.model_path),
-        "--host",
-        "127.0.0.1",
-        "--port",
-        str(server.port),
-        "-c",
-        str(server.context),
-        "-ngl",
-        str(server.gpu_layers),
-        "--flash-attn",
-        server.flash_attn,
-        "-ctk",
-        server.cache_type_k,
-        "-ctv",
-        server.cache_type_v,
-        "-b", str(server.batch_size),
-        "-ub", str(server.ubatch_size),
-        "--temp",
-        str(server.temp),
-        "--top-p",
-        str(server.top_p),
-        "--top-k",
-        str(server.top_k),
-        "--presence-penalty",
-        str(server.presence_penalty),
-    ]
-
-    if server.mmproj_path:
-        cmd.extend(["--mmproj", str(server.mmproj_path)])
-        if server.mmproj_offload:
-            cmd.append("--mmproj-offload")
-
-    if server.fit_target:
-        cmd.extend(["--fit", "on", "--fit-target", str(server.fit_target)])
-
-    if not server.enable_thinking:
-        cmd.extend(["--chat-template-kwargs", '{"enable_thinking":false}'])
-
-    return cmd
+    return server.to_llama_command(config.llama_dir)
 
 
 def start_server(server: ServerConfig, window_title: str = None) -> subprocess.Popen:

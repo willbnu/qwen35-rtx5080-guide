@@ -3,11 +3,10 @@ Configuration loader for Qwen3.5 LLM servers.
 Loads settings from config/servers.yaml and provides easy access.
 """
 
-import os
 import yaml
 from pathlib import Path
 from dataclasses import dataclass, field
-from typing import Optional, Dict, List, Any
+from typing import Optional, Dict, List
 
 # Base directory
 BASE_DIR = Path(__file__).parent.parent
@@ -35,6 +34,7 @@ class ServerConfig:
     vram_estimate_gb: float
     use_case: str
     description: str
+    models_dir: Path = field(repr=False)
     enabled: bool = True
     mmproj_offload: bool = False  # GPU offload for vision projector
     batch_size: int = 1024  # -b parameter
@@ -43,12 +43,12 @@ class ServerConfig:
 
     @property
     def model_path(self) -> Path:
-        return BASE_DIR / "models" / "unsloth-gguf" / self.model
+        return self.models_dir / self.model
 
     @property
     def mmproj_path(self) -> Optional[Path]:
         if self.mmproj:
-            return BASE_DIR / "models" / "unsloth-gguf" / self.mmproj
+            return self.models_dir / self.mmproj
         return None
 
     @property
@@ -63,7 +63,7 @@ class ServerConfig:
     def health_url(self) -> str:
         return f"{self.base_url}/health"
 
-    def to_llama_command(self, llama_dir: Path, logs_dir: Path) -> List[str]:
+    def to_llama_command(self, llama_dir: Path) -> List[str]:
         """Generate llama-server command arguments"""
         cmd = [
             str(llama_dir / "llama-server.exe"),
@@ -132,12 +132,19 @@ class Config:
         self._load_profiles()
         self._load_benchmark()
 
+    def _resolve_repo_path(self, raw_path: str) -> Path:
+        """Resolve configured paths relative to the repository root."""
+        path = Path(raw_path)
+        if path.is_absolute():
+            return path
+        return BASE_DIR / path
+
     def _load_paths(self):
         paths = self._raw["paths"]
-        self.llama_dir = Path(paths["llama_dir"])
-        self.models_dir = Path(paths["models_dir"])
-        self.logs_dir = Path(paths["logs_dir"])
-        self.results_dir = Path(paths["results_dir"])
+        self.llama_dir = self._resolve_repo_path(paths["llama_dir"])
+        self.models_dir = self._resolve_repo_path(paths["models_dir"])
+        self.logs_dir = self._resolve_repo_path(paths["logs_dir"])
+        self.results_dir = self._resolve_repo_path(paths["results_dir"])
 
         # Ensure directories exist
         self.logs_dir.mkdir(parents=True, exist_ok=True)
@@ -165,6 +172,7 @@ class Config:
                 vram_estimate_gb=data["vram_estimate_gb"],
                 use_case=data["use_case"],
                 description=data["description"],
+                models_dir=self.models_dir,
                 enabled=data.get("enabled", True),
                 mmproj_offload=cfg.get("mmproj_offload", False),
                 batch_size=cfg.get("batch_size", 1024),

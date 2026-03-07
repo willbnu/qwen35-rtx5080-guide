@@ -1,10 +1,11 @@
 """Unit tests for config_loader module"""
 import pytest
+import yaml
 from pathlib import Path
 import sys
 
 sys.path.insert(0, str(Path(__file__).parent.parent / "config"))
-from config_loader import Config, ServerConfig, Profile, get_config, reload_config
+from config_loader import BASE_DIR, CONFIG_FILE, Config, ServerConfig, Profile, get_config, reload_config
 
 
 class TestServerConfig:
@@ -14,6 +15,7 @@ class TestServerConfig:
         server = config.get_server("coding")
         assert server is not None
         assert isinstance(server.model_path, Path)
+        assert server.model_path == config.models_dir / server.model
 
     def test_base_url_format(self):
         """Test base_url is correctly formatted"""
@@ -45,6 +47,26 @@ class TestServerConfig:
         assert server is not None
         assert server.mmproj_path is None or isinstance(server.mmproj_path, Path)
 
+    def test_mmproj_path_uses_configured_models_dir(self):
+        """Test mmproj_path uses the configured models_dir"""
+        config = get_config()
+        server = config.get_server("fast_vision")
+        assert server is not None
+        assert server.mmproj_path == config.models_dir / server.mmproj
+
+    def test_to_llama_command_includes_recent_server_flags(self):
+        """Test newer llama.cpp tuning flags are included in command generation"""
+        config = get_config()
+        server = config.get_server("fast_vision")
+        assert server is not None
+
+        cmd = server.to_llama_command(config.llama_dir)
+
+        assert "--mmproj-offload" in cmd
+        assert "-b" in cmd and str(server.batch_size) in cmd
+        assert "-ub" in cmd and str(server.ubatch_size) in cmd
+        assert "--fit-target" in cmd and str(server.fit_target) in cmd
+
 
 class TestConfig:
     def test_load_config(self):
@@ -52,6 +74,26 @@ class TestConfig:
         config = get_config()
         assert config is not None
         assert isinstance(config, Config)
+
+    def test_relative_paths_are_resolved_from_repo_root(self, tmp_path):
+        """Test relative paths in YAML resolve against the repo root instead of cwd"""
+        raw = yaml.safe_load(CONFIG_FILE.read_text())
+        raw["paths"] = {
+            "llama_dir": "./custom-llama",
+            "models_dir": "./custom-models",
+            "logs_dir": "./custom-logs",
+            "results_dir": "./custom-results",
+        }
+
+        config_path = tmp_path / "servers.yaml"
+        config_path.write_text(yaml.safe_dump(raw), encoding="utf-8")
+
+        config = Config(config_path)
+
+        assert config.llama_dir == BASE_DIR / "custom-llama"
+        assert config.models_dir == BASE_DIR / "custom-models"
+        assert config.logs_dir == BASE_DIR / "custom-logs"
+        assert config.results_dir == BASE_DIR / "custom-results"
 
     def test_servers_exist(self):
         """Test expected servers are loaded"""
